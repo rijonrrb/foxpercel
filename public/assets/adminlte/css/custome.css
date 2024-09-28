@@ -1,0 +1,212 @@
+.sidebar-dark-primary .nav-sidebar>.nav-item>.nav-link.active, .sidebar-light-primary .nav-sidebar>.nav-item>.nav-link.active {
+    background-color: #ffffff !important;
+    color: #212121;
+}
+
+.elevation-4 {
+    box-shadow: none !important;
+}
+
+[class*=sidebar-dark-] {
+    background-color: #0b4e78 !important;
+}
+
+[class*=sidebar-dark] .brand-link {
+    border-bottom: 1px solid #083452;
+}
+
+[class*=sidebar-dark-] .sidebar a {
+    color: #ffffff;
+}
+
+/* .btn-primary { 
+    background-color: #1D80C7 !important;
+    border-color: #1D80C7 !important;
+} */
+.btn-primary { 
+    background-color: #f6821f !important;
+    border-color: #f6821f !important;
+}
+
+.btn-secondary { 
+    background-color: #1484cc !important;
+    border-color: #1484cc !important;
+}
+
+.btn-success {
+    background-color: #1484cc !important;
+    border-color: #1484cc !important;
+}
+
+div#dataTables_length label {
+    margin: 0 !important;
+    font-size: 14px;
+    padding: 11px 14px !important;
+}
+
+div#dataTables_length label {
+    margin: 0 !important;
+    font-size: 14px;
+    padding: 11px 14px !important;
+}
+
+div#dataTables_filter {
+    padding-top: 7px;
+    margin-right: 12px;
+    font-size: 14px;
+}
+
+div#dataTables_filter input[type="search"] {
+    outline: none !important;
+    box-shadow: none !important;
+    border: 1px solid #CCC;
+    height: 31px;
+    border-radius: 50px;
+    padding: 4px 7px;
+}
+
+div#dataTables_info {
+    padding-left: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0 !important;
+    vertical-align: middle;
+    padding-top: 21px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 4px 14px;
+    border: 1px solid #ddd !important;
+    font-size: 15px;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+    padding: 12px 11px;
+}
+
+table.dataTable.no-footer {
+    border-bottom: 1px solid #e8e8e8 !important;
+}
+
+
+div#datatable_length label {
+    margin: 0 !important;
+    font-size: 14px;
+    padding: 11px 14px !important;
+}
+
+div#datatable_length label {
+    margin: 0 !important;
+    font-size: 14px;
+    padding: 11px 14px !important;
+}
+
+div#datatable_filter {
+    padding-top: 7px;
+    margin-right: 12px;
+    font-size: 14px;
+}
+
+div#datatable_filter input[type="search"] {
+    outline: none !important;
+    box-shadow: none !important;
+    border: 1px solid #CCC;
+    height: 31px;
+    border-radius: 50px;
+    padding: 4px 7px;
+}
+
+div#datatable_info {
+    padding-left: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0 !important;
+    vertical-align: middle;
+    padding-top: 21px;
+}
+
+.datatable_wrapper .datatable_paginate .paginate_button {
+    padding: 4px 14px;
+    border: 1px solid #ddd !important;
+    font-size: 15px;
+}
+
+.datatable_wrapper .datatable_paginate {
+    padding: 12px 11px;
+}
+
+table.dataTable.no-footer {
+    border-bottom: 1px solid #e8e8e8 !important;
+}
+
+th {
+    border-bottom: none !important;
+}
+
+button {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+td {
+    vertical-align: middle;
+}
+
+.modal-content {
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 3px;
+}
+
+.modal {
+    background-color: #00000057;
+}
+
+.swal2-container.swal2-backdrop-show,
+.swal2-container.swal2-noanimation {
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
+    background-color: #00000057;
+}
+
+label:not(.form-check-label):not(.custom-file-label) {
+    font-weight: 400 !important;
+}
+
+.form-control {
+    height: calc(44px + 2px) !important;
+}
+
+table.dataTable tbody th,
+table.dataTable tbody td {
+    padding: 8px 10px;
+    vertical-align: middle;
+}
+
+textarea.form-control {
+    height: auto !important;
+}
+
+body:not(.layout-fixed) .main-sidebar {
+    position: fixed !important;
+    height: 100vh;
+}
+
+.select2-container {
+    box-sizing: border-box;
+    display: inline-block;
+    margin: 0;
+    position: relative;
+    vertical-align: middle;
+    display: block;
+    width: 100% !important;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border-color: #ced4da !important;
+    border-radius: 0.25rem;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
