@@ -4,13 +4,13 @@
 
 @push('style')
 @endpush
-@section('nav_menu', 'Welcome')
+@section('nav_menu', 'Welcome back '.auth()->user()->name.' ')
 
 @section('content')
 <div class="content-wrapper">
     <div class="content">
         <div class="container-fluid">
-            <div class="row"> ddddddddddd
+            <div class="row">
             </div>
         </div>
     </div>

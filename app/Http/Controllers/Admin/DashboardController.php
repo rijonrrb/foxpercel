@@ -22,14 +22,6 @@ class DashboardController extends Controller
     public function dashboard()
     {
         $data['title'] = 'Dashboard';
-        // $data['alarms'] = Alarm::latest()->take(10)->get();
-        $data['rows'] = User::where('role_id', 1)->latest()->take(10)->get();
-        $data['customer_count'] = User::where('status',1)->where('role_id', 1)->count();
-        // $data['staff_count'] = User::where('status',1)->where('role_id', 2)->count();
-        // $data['alarm_count'] = Alarm::count();
-        // $data['notification_count'] = NotificationTemplate::count();
-        $data['sms_count'] = User::where('status', 1)->where('role_id', 1)->sum('sms_count');
-
         return view('admin.dashboard',compact('data'));
     }
 

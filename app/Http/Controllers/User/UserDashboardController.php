@@ -25,7 +25,7 @@ class UserDashboardController extends Controller
     {
         $data['title'] = 'Profile';
         $data['user'] = Auth::user();
-         return view('user.profile',compact('data'));
+        return view('user.profile',compact('data'));
     }
     public function profileUpdate(Request $request)
     {
@@ -33,19 +33,18 @@ class UserDashboardController extends Controller
         $user = User::where('id', $user_id)->first();
 
         $this->validate($request, [
-            'name'  => 'required',
-            'email'   => 'required|unique:users,email,' . $user->id . ',id',
-            'phone'   => 'required',
+            'name'     => 'required',
+            'email'    => 'required|unique:users,email,' . $user->id . ',id',
+            'phone'    => 'required|unique:users,phone,' . $user->id . ',id',
             'address'  => 'required',
         ]);
 
         try {
 
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->phone = $request->phone;
-            $user->address = $request->address;
-            $user->ip_address = $request->ip_address;
+            $user->name     = $request->name;
+            $user->email    = $request->email;
+            $user->phone    = $request->phone;
+            $user->address  = $request->address;
 
             if ($request->hasFile('image')) {
 
@@ -59,11 +58,9 @@ class UserDashboardController extends Controller
                 $base_name  = implode('-', $base_name);
                 $base_name  = Str::lower($base_name);
                 $image_name = $base_name . "-" . uniqid() . "." . $image->getClientOriginalExtension();
-                $extension  = $image->getClientOriginalExtension();
                 $file_path  = 'uploads/user';
                 $image->move(public_path($file_path), $image_name);
                 $user->image  = $file_path . '/' . $image_name;
-
             }
 
             $user->save();

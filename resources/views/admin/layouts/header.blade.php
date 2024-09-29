@@ -1,51 +1,51 @@
 <!-- Navbar -->
-<nav class="main-header navbar navbar-expand navbar-white navbar-light">
-    <!-- Left navbar links -->
-    <ul class="navbar-nav">
-        <li class="nav-item">
-            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-        </li>
-        <li class="nav-item d-none d-sm-inline-block">
-            <a href="{{ route('home') }}" target="_blank" class="nav-link">
-                <i class="fas fa-globe fa-2"></i>
-            </a>
-        </li>
-        <li class="nav-item d-none d-sm-inline-block">
-            <a href="{{ route('admin.cacheClear') }}" class="nav-link">
-                <i class="fas fa-broom"></i>
-            </a>
-        </li>
-    </ul>
-
-    <!-- Right navbar links -->
-    <ul class="navbar-nav ml-auto d-flex align-items-center">
-        
-        <li class="nav-item">
-            <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-                <i class="fas fa-expand-arrows-alt"></i>
-            </a>
-        </li>
-        <li class="nav-item dropdown">
-            <a class="nav-link" data-toggle="dropdown" href="#">
-                <span class="image">
-                    <p style="font-weight: bold">{{ Auth::user()->name }}</p>
-                    {{-- <img src="{{ getProfile(Auth::user()->image) }}" alt="{{ auth::user()->name }}"
-                        class="img-circle elevation-2" width="30" height="30"> --}}
-                </span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
-                <a href="{{ route('admin.profile') }}" class="dropdown-item">{{ __('Profile & account') }}</a>
-                <div class="dropdown-divider"></div>
-                <a href="{{ route('logout') }}" class="dropdown-item text-danger"
-                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout')
-                    }}</a>
-                <form class="logout" id="logout-form" action="{{ route('logout') }}" method="POST">
-                    @csrf
-                </form>
+<div class="page-header d-print-none">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <!-- Page pre-title -->
+                <div class="page-pretitle">
+                    Dashboard
+                </div>
+                <h2 class="page-title">
+                    @yield('nav_menu')
+                </h2>
             </div>
-        </li>
-
-
-    </ul>
-</nav>
-<!-- /.navbar -->
+            <!-- Page title actions -->
+            <div class="col-auto ms-auto d-print-none">
+                <div class="btn-list">
+                    <a class="nav-link" data-bs-toggle="dropdown" href="#">
+                        <span class="image d-flex align-items-center">
+                            <img src="{{ getProfile(Auth::user()->image) }}" alt="{{ auth::user()->name }}"
+                                 class="rounded-circle shadow bg-secondary" style="padding: 0.1rem;" width="35" height="35">
+                            <p style="font-weight: bold" class="mb-0 ms-2">{{ Auth::user()->name }}</p>
+                        </span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-md dropdown-menu-end">
+                        <a href="{{ route('user.profile') }}" class="dropdown-item">
+                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  
+                                stroke-width="3"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-user-circle">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                                <path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855" />
+                            </svg>
+                            <span class="ms-2">{{ __('Profile & account') }}</span>
+                        </a>
+                        <div class="dropdown-divider m-1"></div>
+                        <a href="{{ route('logout') }}" class="dropdown-item text-danger"
+                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="3"  
+                                stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-logout">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" />
+                                <path d="M9 12h12l-3 -3" /><path d="M18 15l3 -3" />
+                            </svg>
+                           <span class="ms-2">{{ __('Logout') }}</span>
+                        </a>
+                        <form class="logout" id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                    </div>
+                </div>                
+            </div>
+        </div>
+    </div>
+</div>

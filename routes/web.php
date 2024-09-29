@@ -45,7 +45,7 @@ Auth::routes();
 // Route::get('/2fa-enable', [TwoFactorController::class, 'enable2fa'])->name('2fa.enabled');
 // Route::post('/2fa/verify', [TwoFactorController::class, 'verify2fa'])->name('2fa.verify');
 
-Route::group(['as' => 'user.', 'prefix' => 'user'], function () {
+Route::group(['as' => 'user.', 'prefix' => 'user', 'middleware' => ['auth']], function () {
     Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
     Route::get('profile', [UserDashboardController::class, 'profile'])->name('profile');
     Route::post('profile-update', [UserDashboardController::class, 'profileUpdate'])->name('profile.update');

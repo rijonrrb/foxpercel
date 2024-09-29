@@ -31,6 +31,9 @@ use App\Http\Controllers\MailController;
 
 
 //====================Admin Authentication=========================
+Route::get('admin', function () {
+    return redirect()->route('login.admin');
+});
 
 Route::get('admin/login', [AdminLoginController::class, 'showLoginForm'])->name('login.admin');
 Route::post('admin/login', [AdminLoginController::class, 'login'])->name('admin.login');
@@ -41,28 +44,7 @@ Route::get('admin/2fa-enable', [TwoFactorController::class, 'enable2fa'])->name(
 Route::post('admin/2fa/verify', [TwoFactorController::class, 'verify2fa'])->name('admin.2fa.verify');
 
 
-Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['auth:admin', '2fa:admin'], 'where' => ['locale' => '[a-zA-Z]{2}']], function () {
-    // {{--('BRAND')--}}
-Route::get('/view',[NewsLetterController::class,'index'])->name('newsletter.list');
-
-
-Route::get('/brand',[BrandController::class,'view'])->name('brand.index');
-Route::get('/add', [BrandController::class, 'create'])->name('brand.create');
-Route::post('/add', [BrandController::class, 'store'])->name('brand.store');
-Route::get('/edit/{brand}', [BrandController::class, 'edit'])->name('admin.brand.edit');
-Route::put('/update/{brand}', [BrandController::class, 'update'])->name('admin.brand.update');
-Route::get('/{brand:slug}/ads', [BrandController::class, 'show'])->name('admin.brand.show');
-Route::delete('/destroy/{brand}', [BrandController::class, 'destroy'])->name('admin.brand.destroy');
-
-
-Route::get('/sc',[SettingsController::class,'setview'])->name('settings.MobileApp.index');
-Route::post('/sc/update',[SettingsController::class,'MobileAppUpdate'])->name('settings.MobileApp.update');
-
-Route::get('/currency',[CurrencyController::class,'currenview'])->name('settings.Currency.index');
-
-// Route::get('/general',[GeneralController::class,'genview'])->name('settings.General.general');
-Route::get('/smtp',[MailController::class,'mailview'])->name('settings.Smtp.mail');
-Route::post('/smtp/update',[SettingsController::class,'SmtpUpdate'])->name('settings.smtp.update');
+Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['auth:admin'], 'where' => ['locale' => '[a-zA-Z]{2}']], function () {
 
 
     Route::get('/', ['as' => 'dashboard', 'uses' => 'DashboardController@dashboard']);
@@ -112,12 +94,6 @@ Route::post('/smtp/update',[SettingsController::class,'SmtpUpdate'])->name('sett
         Route::get('{id}/delete', 'FaqController@delete')->name('delete');
     });
 
-    // Account Setting
-    // Route::get('account', ['as'=>'account','uses'=>'AccountController@account']);
-    // Route::get('edit-account', ['as'=>'edit.account','uses'=>'AccountController@editAccount']);
-    // Route::post('update-account', ['as'=>'update.account','uses'=>'AccountController@updateAccount']);
-    // Route::get('change-password', ['as'=>'change.password','uses'=>'AccountController@changePassword']);
-    // Route::post('update-password', ['as'=>'update.password','uses'=>'AccountController@updatePassword']);
 
 
 
@@ -132,52 +108,7 @@ Route::post('/smtp/update',[SettingsController::class,'SmtpUpdate'])->name('sett
     Route::post('update-tex-setting', 'SettingsController@updateTaxSetting')->name('update.tax.setting');
     Route::post('update-email-setting', 'SettingsController@updateEmailSetting')->name('update.email.setting');
     Route::get('test-email', 'SettingsController@testEmail')->name('test.email');
-    //cards
-    //  Route::get('cards', 'CardController@index')->name('cards');
-    // Route::get('card/trash', 'CardController@getTrashList')->name('card.trash');
-    // Route::get('card/edit/{card_id}', 'CardController@edit')->name('card.edit');
-    // Route::get('card/delete/{card_id}', 'CardController@delete')->name('card.delete');
-    // Route::get('card/change-status/{card_id}', 'CardController@changeStatus')->name('card.change-status');
-    // Route::get('card/active/{card_id}', 'CardController@activeCard')->name('card.active');
 
-    // Plans
-    // Route::get('plans', 'PlanController@plans')->name('plans');
-    // Route::get('add-plan', 'PlanController@addPlan')->name('add.plan');
-    // Route::post('save-plan', 'PlanController@savePlan')->name('save.plan');
-    // Route::get('edit-plan/{id}', 'PlanController@editPlan')->name('edit.plan');
-    // Route::get('shareable-update/{id}', 'PlanController@shareableUpdate')->name('shareable-update');
-    // Route::post('update-plan', 'PlanController@updatePlan')->name('update.plan');
-    // Route::get('plan/{id}/{period}/getstripe', 'PlanController@getstripe')->name('plan.getstripe');
-    // Route::get('plan/{id}/{period}/getpaypal', 'PlanController@createPaypalPlan')->name('plan.getpaypal');
-    // Route::get('delete-plan', 'PlanController@deletePlan')->name('delete.plan');
-
-    // Users
-    // Route::get('roles', 'RolesController@index')->name('roles.index');
-    // Route::get('roles/create', 'RolesController@create')->name('roles.create');
-    // Route::post('roles/store', 'RolesController@store')->name('roles.store');
-    // Route::get('roles/{id}/show', 'RolesController@show')->name('roles.show');
-    // Route::get('roles/{id}/edit', 'RolesController@edit')->name('roles.edit');
-    // Route::post('roles/{id}/update', 'RolesController@update')->name('roles.update');
-    // Route::delete('roles/{id}/destroy', 'RolesController@destroy')->name('roles.destroy');
-
-
-    // Route::get('permissions', 'PermissionsController@index')->name('permissions.index');
-    // Route::get('permissions/create', 'PermissionsController@create')->name('permissions.create');
-    // Route::post('permissions/store', 'PermissionsController@store')->name('permissions.store');
-    // Route::get('permissions/{id}/show', 'PermissionsController@show')->name('permissions.show');
-    // Route::get('permissions/{id}/edit', 'PermissionsController@edit')->name('permissions.edit');
-    // Route::post('permissions/{id}/update', 'PermissionsController@update')->name('permissions.update');
-    // Route::post('permissions/{id}/destroy', 'PermissionsController@destroy')->name('permissions.destroy');
-
-    // Route::get('user', 'UserController@index')->name('user.index');
-    // Route::get('user/create', 'UserController@create')->name('user.create');
-    // Route::post('user/store', 'UserController@store')->name('user.store');
-    // Route::get('user/{id}/edit', 'UserController@edit')->name('user.edit');
-    // Route::post('user/{id}/update', 'UserController@update')->name('user.update');
-    // Route::get('user/{id}/destroy', 'UserController@destroy')->name('user.destroy');
-
-    // Route::resource('roles', RolesController::class);
-    // Route::resource('permissions', PermissionsController::class);
 
     Route::get('edit-user/{id}', 'UserController@editUser')->name('edit.user');
     Route::post('update-user', 'UserController@updateUser')->name('update.user');

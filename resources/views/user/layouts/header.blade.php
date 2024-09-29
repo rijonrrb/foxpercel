@@ -17,7 +17,7 @@
                     <a class="nav-link" data-bs-toggle="dropdown" href="#">
                         <span class="image d-flex align-items-center">
                             <img src="{{ getProfile(Auth::user()->image) }}" alt="{{ auth::user()->name }}"
-                                 class="rounded-circle shadow bg-secondary" style="padding: 0.15rem;" width="35" height="35">
+                                 class="rounded-circle shadow bg-secondary" style="padding: 0.1rem;" width="35" height="35">
                             <p style="font-weight: bold" class="mb-0 ms-2">{{ Auth::user()->name }}</p>
                         </span>
                     </a>
