@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\Auth\LoginController as AdminLoginController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\BlogPostController;
+use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\TwoFactorController;
 use App\Models\BlogCategory;
@@ -238,13 +239,12 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'Admin', 'mi
 
     //Country
     Route::group(['prefix' => 'country', 'as' => 'country.'], function () {
-        Route::get('/', 'CountryController@index')->name('index');
-        Route::get('create', 'CountryController@create')->name('create');
-        Route::post('store', 'CountryController@store')->name('store');
-        Route::get('{id}/edit', 'CountryController@edit')->name('edit');
-        Route::post('{id}/update', 'CountryController@update')->name('update');
-        // Route::get('{id}/view', 'CountryController@view')->name('view');
-        Route::get('{id}/delete', 'CountryController@delete')->name('delete');
+        Route::get('/', [CountryController::class, 'index'])->name('index');
+        Route::get('create', [CountryController::class, 'create'])->name('create');
+        Route::post('store', [CountryController::class, 'store'])->name('store');
+        Route::get('{id}/edit', [CountryController::class, 'edit'])->name('edit');
+        Route::post('{id}/update', [CountryController::class, 'update'])->name('update');
+        Route::get('{id}/delete', [CountryController::class, 'delete'])->name('delete');
     });
 
     //Region

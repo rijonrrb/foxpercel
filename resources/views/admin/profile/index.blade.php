@@ -1,147 +1,238 @@
 @extends('admin.layouts.master')
+@section('dashboard', 'active')
 @section('title') {{ $data['title'] ?? '' }} @endsection
+
+@push('style')
+@endpush
+@section('nav_menu', $data['title'])
+
 @section('content')
-<div class="content-wrapper">
-    <div class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1 class="m-0">Profile</h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Profile</li>
-                    </ol>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="card card-primary card-outline">
-                        <div class="card-body box-profile position-relative">
-                            <a href="javascript:void(0)" class="position-absolute" style="right: 5px; top: 5px;" title="Edit" data-toggle="modal" data-target="#changePasswordModal">
-                                <i class="fa-solid fa-key"></i>
-                            </a>
-                            <div class="text-center">
-                                {{-- <img class="profile-user-img img-fluid img-circle"
-                                    src="{{ getProfile($data['user']->image) }}"
-                                    style="width:160px; height:160px; display:block;" alt=""> --}}
-                            </div>
-                            <h3 class="profile-username text-center">{{ $data['user']->name }}</h3>
-                            <p class="text-muted text-center">{{ $data['user']->email }}</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-9">
-                    <div class="card">
-                        <div class="card-body">
-                            <form action="{{route('admin.profile.update')}}" method="post" enctype="multipart/form-data">
+    <div class="container-xl">
+        <div class="content-wrapper">
+            <div class="content">
+                <div class="card">
+                    <div class="row">
+                        <div class="col-md-12 d-flex flex-column">
+                            <form action="{{ route('admin.profile.update') }}" method="post" enctype="multipart/form-data">
                                 @csrf
-                                <div class="row">
-                                    {{-- <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label for="image" class="form-label">Profile Photo</label>
-                                            <input type="file" name="image" id="image" class="form-control">
+                                <div class="card-body">
+                                    <h2 class="mb-4">My Account</h2>
+                                    <h3 class="card-title">Profile Image</h3>
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <span class="preview avatar avatar-xl" style="background-image: url('{{ getPhoto($data['user']->image) }}');"></span>
                                         </div>
-                                    </div> --}}
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="name" class="form-label">Name</label>
-                                            <input type="text" name="name" value="{{ $data['user']->name }}" id="name" class="form-control" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="email" class="form-label">Email</label>
-                                            <input type="text" name="email" value="{{ $data['user']->email }}" id="email" class="form-control" required>
+                                        <div class="col-auto">
+                                            <a href="javascript:void(0)" class="btn" id="changeAvatarBtn">
+                                                Change avatar
+                                            </a>
+                                            <input type="file" name="image" id="image" accept="image/*" hidden>
                                         </div>
                                     </div>
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <button type="submit" class="btn btn-primary">Update</button>
+
+                                    <h3 class="card-title mt-4">Profile Information</h3>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <div class="form-label">Name</div>
+                                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" required value="{{$data['user']->name}}">
                                         </div>
+                                        <div class="col-md-6">
+                                            <div class="form-label">Email</div>
+                                            <input type="text" name="email" class="form-control @error('email') is-invalid @enderror" required value="{{$data['user']->email}}">
+                                        </div>
+                                    </div>
+                                    <h3 class="card-title mt-4">Password</h3>
+                                    <p class="card-subtitle">If you wish, you can set a new password by clicking 'Set New Password'</p>
+                                    <div>
+                                        <a href="#" class="btn" data-bs-toggle="modal"
+                                            data-bs-target="#changePasswordModal">
+                                            Set New Password
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-transparent mt-auto">
+                                    <div class="btn-list justify-content-end">
+                                        <a href="{{route('admin.dashboard')}}" class="btn">
+                                            Cancel
+                                        </a>
+                                        <button type="submit" class="btn btn-primary">
+                                            Submit
+                                        </button>
                                     </div>
                                 </div>
                             </form>
                         </div>
                     </div>
-
                 </div>
-
             </div>
         </div>
     </div>
-</div>
 
+    {{-- Password Edit Modal --}}
+    <div class="modal modal-blur fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title">Change Password</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
 
-<div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="card-title">Change Password</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
+                <!-- Form -->
                 <form action="{{ route('admin.password.update') }}" method="post">
                     @csrf
-                    <div class="form-group">
-                        <label for="password-field" class="form-label">New Password <span class="text-danger">*</span></label>
-                        <div class="input-group input-group-flat">
-                            <input type="password" name="password" id="password-field" class="form-control" required>
-                            <span class="input-group-text px-3">
-                                <a href="javascript:void(0)" class="link-secondary fa fa-fw fa-eye field-icon toggle-password" toggle="#password-field"></a>
-                            </span>
+                    <!-- Modal Body -->
+                    <div class="modal-body">
+                        <!-- Password Input -->
+                        <div class="mb-3">
+                            <label class="form-label">New Password</label>
+                            <div class="input-group input-group-flat">
+                                <input type="password" name="password" id="password" class="form-control" autocomplete="off" required>
+                                <span class="input-group-text">
+                                    <a href="javascript:void(0)" class="link-secondary" id="togglePasswordIcon" title="Show password">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                            <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                            <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                                        </svg>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Confirm Password Input -->
+                        <div class="mb-3">
+                            <label class="form-label">Confirm New Password</label>
+                            <div class="input-group input-group-flat">
+                                <input type="password" name="confirm_password" id="confirm_password" class="form-control" autocomplete="off" required>
+                                <span class="input-group-text">
+                                    <a href="javascript:void(0)" class="link-secondary" id="toggleConfirmPasswordIcon" title="Show password">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                            <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                            <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                                        </svg>
+                                    </a>
+                                </span>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="confirm_password" class="form-label">Confirm New Password <span class="text-danger">*</span></label>
-                        <div class="input-group input-group-flat">
-                            <input type="password" name="confirm_password" id="confirm_password" class="form-control" required>
-                            <span class="input-group-text px-3">
-                                <a href="javascript:void(0)" class="link-secondary fa fa-fw fa-eye field-icon confirm-toggle-password" toggle="#confirm_password"></a>
-                            </span>
-                        </div>
+
+                    <!-- Modal Footer -->
+                    <div class="modal-footer">
+                        <a href="javascript:void(0)" class="btn btn-danger" data-bs-dismiss="modal">
+                            Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary ms-auto">
+                            Update
+                        </button>
                     </div>
-                    <button type="submit" class="btn btn-success">Change Password</button>
                 </form>
             </div>
         </div>
     </div>
-</div>
 @endsection
+
 @push('script')
-<script>
-    $(document).ready(function () {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('confirm_password');
 
-    // password show hide
-    $(".toggle-password").click(function () {
-    $(this).toggleClass("fa-eye fa-eye-slash");
-    var input = $($(this).attr("toggle"));
-    if (input.attr("type") == "password") {
-        input.attr("type", "text");
-    } else {
-        input.attr("type", "password");
-    }
-    });
+            const togglePasswordIcon = document.querySelector('.input-group-text a#togglePasswordIcon');
+            const toggleConfirmPasswordIcon = document.querySelector(
+                '.input-group-text a#toggleConfirmPasswordIcon');
 
-    $(".confirm-toggle-password").click(function () {
-    $(this).toggleClass("fa-eye fa-eye-slash");
-    var input = $($(this).attr("toggle"));
-    if (input.attr("type") == "password") {
-        input.attr("type", "text");
-    } else {
-        input.attr("type", "password");
-    }
-    });
+            let isPasswordVisible = false;
+            let isConfirmPasswordVisible = false;
 
-    })
-</script>
+            // Toggle password visibility for "password" field
+            togglePasswordIcon.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                if (isPasswordVisible) {
+                    passwordInput.type = 'password';
+                    togglePasswordIcon.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" 
+                    stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                    <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                </svg>
+            `;
+                } else {
+                    passwordInput.type = 'text';
+                    togglePasswordIcon.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" 
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                     class="icon icon-tabler icons-tabler-outline icon-tabler-eye-off">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M10.585 10.587a2 2 0 0 0 2.829 2.828" />
+                    <path d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 
+                             4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 
+                             -2.138 2.87" />
+                    <path d="M3 3l18 18" />
+                </svg>
+            `;
+                }
+
+                isPasswordVisible = !isPasswordVisible;
+            });
+
+            // Toggle password visibility for "confirm_password" field
+            toggleConfirmPasswordIcon.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                if (isConfirmPasswordVisible) {
+                    confirmPasswordInput.type = 'password';
+                    toggleConfirmPasswordIcon.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" 
+                    stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                    <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                </svg>
+            `;
+                } else {
+                    confirmPasswordInput.type = 'text';
+                    toggleConfirmPasswordIcon.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" 
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                     class="icon icon-tabler icons-tabler-outline icon-tabler-eye-off">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M10.585 10.587a2 2 0 0 0 2.829 2.828" />
+                    <path d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 
+                             4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 
+                             -2.138 2.87" />
+                    <path d="M3 3l18 18" />
+                </svg>
+            `;
+                }
+
+                isConfirmPasswordVisible = !isConfirmPasswordVisible;
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const changeAvatarBtn = document.getElementById('changeAvatarBtn');
+            const imageInput = document.getElementById('image');
+            const preview = document.querySelector('.preview');
+    
+            changeAvatarBtn.addEventListener('click', function() {
+                imageInput.click();
+            });
+    
+            imageInput.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        preview.style.backgroundImage = `url(${e.target.result})`;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+    </script>
 @endpush

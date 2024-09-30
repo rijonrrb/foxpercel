@@ -46,7 +46,7 @@ class DashboardController extends Controller
 
     public function adminProfile()
     {
-        $data['title'] = 'Profile';
+        $data['title'] = 'Profile & Account';
         $data['user'] = Auth::user();
          return view('admin.profile.index',compact('data'));
     }
@@ -60,10 +60,8 @@ class DashboardController extends Controller
         ]);
 
         try {
-
             $user->name = $request->name;
             $user->email = $request->email;
-
             if ($request->hasFile('image')) {
 
                 if (File::exists(public_path($user->image))) {
@@ -76,20 +74,18 @@ class DashboardController extends Controller
                 $base_name  = implode('-', $base_name);
                 $base_name  = Str::lower($base_name);
                 $image_name = $base_name . "-" . uniqid() . "." . $image->getClientOriginalExtension();
-                $extension  = $image->getClientOriginalExtension();
                 $file_path  = 'uploads/admin';
                 $image->move(public_path($file_path), $image_name);
                 $user->image  = $file_path . '/' . $image_name;
-
             }
 
             $user->save();
         } catch (\Exception $e) {
-            Toastr::error(trans('An unexpected error occured while updating profile information'), trans('Error'), ["positionClass" => "toast-top-right"]);
+            Toastr::error(trans('An unexpected error occured while updating profile information'), trans('Error'), ["positionClass" => "toast-top-center"]);
             return redirect()->back();
         }
 
-        Toastr::success(trans('Profile information updated successfully'), trans('Success'), ["positionClass" => "toast-top-right"]);
+        Toastr::success(trans('Profile information updated successfully'), trans('Success'), ["positionClass" => "toast-top-center"]);
         return redirect()->route('admin.profile');
     }
     public function passwordUpdate(Request $request)

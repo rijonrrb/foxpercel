@@ -4,7 +4,6 @@
 
 @push('style')
 @endpush
-@section('nav_menu', 'Welcome back '.auth()->user()->name.' ')
 
 @section('content')
 <div class="content-wrapper">
