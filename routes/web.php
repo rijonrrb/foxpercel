@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\SocialLoginController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OtpController;
 use App\Http\Controllers\Staff\AlarmController as StaffAlarmController;
 use App\Http\Controllers\Staff\DefconLevelController as StaffDefconLevelController;
 use App\Http\Controllers\Staff\UserDashboardController as StaffUserDashboardController;
@@ -44,6 +45,7 @@ Auth::routes();
 // Route::get('/2fa', [TwoFactorController::class, 'show2faForm'])->name('2fa');
 // Route::get('/2fa-enable', [TwoFactorController::class, 'enable2fa'])->name('2fa.enabled');
 // Route::post('/2fa/verify', [TwoFactorController::class, 'verify2fa'])->name('2fa.verify');
+Route::get('/otp-verification', [OtpController::class, 'otpForm'])->name('otp.verification');
 
 Route::group(['as' => 'user.', 'prefix' => 'user', 'middleware' => ['auth']], function () {
     Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
@@ -51,15 +53,6 @@ Route::group(['as' => 'user.', 'prefix' => 'user', 'middleware' => ['auth']], fu
     Route::post('profile-update', [UserDashboardController::class, 'profileUpdate'])->name('profile.update');
     Route::post('password-update', [UserDashboardController::class, 'passwordUpdate'])->name('password.update');
 
-    Route::group(['prefix' => 'staff', 'as' => 'staff.'], function () {
-        Route::get('/', [StaffController::class, 'index'])->name('index');
-        Route::get('create', [StaffController::class, 'create'])->name('create');
-        Route::post('store', [StaffController::class, 'store'])->name('store');
-        Route::get('edit/{id?}', [StaffController::class, 'edit'])->name('edit');
-        Route::get('view/{id?}', [StaffController::class, 'view'])->name('view');
-        Route::post('update/{id?}', [StaffController::class, 'update'])->name('update');
-        Route::get('delete/{id?}', [StaffController::class, 'delete'])->name('delete');
-    });
 
     Route::group(['prefix' => 'settings', 'as' => 'settings.'], function () {
         Route::get('/', [SettingsController::class, 'index'])->name('index');
