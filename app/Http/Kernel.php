@@ -66,5 +66,6 @@ class Kernel extends HttpKernel
         'role' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
         'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
         'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+        'check.otp' => \App\Http\Middleware\CheckOtpVerification::class,
     ];
 }

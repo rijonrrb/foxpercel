@@ -11,15 +11,12 @@ class OtpVerification extends Model
     use HasFactory;
 
     protected $fillable = [
-        'mobile',
         'email',
         'user_id',
         'otp_date',
-        'otp',
-        'status',
-        'created_at',
         'expire_time',
-        'created_by',
+        'otp',
         'otp_count',
+        'status',
     ];
 }

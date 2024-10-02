@@ -118,10 +118,15 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
 
+        $user = $this->guard()->user();
+    
+        if ($user) {
+            $user->otp_verified_at = null;
+            $user->save();
+        }
+
         $this->guard()->logout();
-
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
         return $request->wantsJson()

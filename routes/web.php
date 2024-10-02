@@ -18,6 +18,7 @@ use App\Http\Controllers\User\UserDashboardController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,18 +46,24 @@ Auth::routes();
 // Route::get('/2fa', [TwoFactorController::class, 'show2faForm'])->name('2fa');
 // Route::get('/2fa-enable', [TwoFactorController::class, 'enable2fa'])->name('2fa.enabled');
 // Route::post('/2fa/verify', [TwoFactorController::class, 'verify2fa'])->name('2fa.verify');
-Route::get('/otp-verification', [OtpController::class, 'otpForm'])->name('otp.verification');
 
 Route::group(['as' => 'user.', 'prefix' => 'user', 'middleware' => ['auth']], function () {
-    Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
-    Route::get('profile', [UserDashboardController::class, 'profile'])->name('profile');
-    Route::post('profile-update', [UserDashboardController::class, 'profileUpdate'])->name('profile.update');
-    Route::post('password-update', [UserDashboardController::class, 'passwordUpdate'])->name('password.update');
+
+    Route::get('/otp-send', [OtpController::class, 'otpsend'])->name('otp.send');
+    Route::get('/otp-form', [OtpController::class, 'otpForm'])->name('otp.form');
+    Route::post('/otp-verification', [OtpController::class, 'otpVerification'])->name('otp.verification');
+
+    Route::group(['middleware' => ['check.otp']], function () {
+        Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
+        Route::get('profile', [UserDashboardController::class, 'profile'])->name('profile');
+        Route::post('profile-update', [UserDashboardController::class, 'profileUpdate'])->name('profile.update');
+        Route::post('password-update', [UserDashboardController::class, 'passwordUpdate'])->name('password.update');
 
 
-    Route::group(['prefix' => 'settings', 'as' => 'settings.'], function () {
-        Route::get('/', [SettingsController::class, 'index'])->name('index');
-        Route::post('/store', [SettingsController::class, 'store'])->name('store');
+        Route::group(['prefix' => 'settings', 'as' => 'settings.'], function () {
+            Route::get('/', [SettingsController::class, 'index'])->name('index');
+            Route::post('/store', [SettingsController::class, 'store'])->name('store');
+        });
     });
 
 });
