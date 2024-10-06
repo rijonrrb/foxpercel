@@ -114,16 +114,14 @@ class CountryController extends Controller
         // if (is_null($this->user) || !$this->user->can('admin.country.delete')) {
         //     abort(403, 'Sorry !! You are Unauthorized.');
         // }
-        DB::beginTransaction();
+        
         try {
             $country = Country::find($id);
             $country->delete();
         } catch (\Exception $e) {
-            DB::rollback();
             Toastr::error(trans('Failed to delete the country. Please try again!'), 'Error', ["positionClass" => "toast-top-center"]);
             return redirect()->route('admin.country.index');
         }
-        DB::commit();
         Toastr::success(trans('Country deleted successfully!'), 'Success', ["positionClass" => "toast-top-center"]);
         return redirect()->route('admin.country.index');
     }

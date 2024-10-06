@@ -103,9 +103,9 @@ class OrderController extends Controller
         //     abort(403, 'Sorry !! You are Unauthorized.');
         // }
 
-        $country = Country::find($id);
-        $html = view('admin.country.edit', compact('country'))->render();
-        return response()->json($html);
+        // $country = Country::find($id);
+        // $html = view('admin.country.edit', compact('country'))->render();
+        // return response()->json($html);
     }
 
     public function update(Request $request, $id)
@@ -118,21 +118,21 @@ class OrderController extends Controller
             'code'   => 'required|max:10',
         ]);
 
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
 
-            $country = Country::find($id);
-            $country->name         = $request->name;
-            $country->code         = $request->code;
-            $country->save();
-        } catch (\Exception $e) {
-            DB::rollback();
-            Toastr::error(trans('Failed to update the country. Please try again!'), 'Error', ["positionClass" => "toast-top-center"]);
-            return redirect()->route('admin.country.index');
-        }
-        DB::commit();
-        Toastr::success(trans('Country updated successfully!'), 'Success', ["positionClass" => "toast-top-center"]);
-        return redirect()->route('admin.country.index');
+        //     $country = Country::find($id);
+        //     $country->name         = $request->name;
+        //     $country->code         = $request->code;
+        //     $country->save();
+        // } catch (\Exception $e) {
+        //     DB::rollback();
+        //     Toastr::error(trans('Failed to update the country. Please try again!'), 'Error', ["positionClass" => "toast-top-center"]);
+        //     return redirect()->route('admin.country.index');
+        // }
+        // DB::commit();
+        // Toastr::success(trans('Country updated successfully!'), 'Success', ["positionClass" => "toast-top-center"]);
+        // return redirect()->route('admin.country.index');
     }
 
 
@@ -142,17 +142,17 @@ class OrderController extends Controller
         // if (is_null($this->user) || !$this->user->can('admin.country.delete')) {
         //     abort(403, 'Sorry !! You are Unauthorized.');
         // }
-        DB::beginTransaction();
-        try {
-            $country = Country::find($id);
-            $country->delete();
-        } catch (\Exception $e) {
-            DB::rollback();
-            Toastr::error(trans('Failed to delete the country. Please try again!'), 'Error', ["positionClass" => "toast-top-center"]);
-            return redirect()->route('admin.country.index');
-        }
-        DB::commit();
-        Toastr::success(trans('Country deleted successfully!'), 'Success', ["positionClass" => "toast-top-center"]);
-        return redirect()->route('admin.country.index');
+        // DB::beginTransaction();
+        // try {
+        //     $country = Country::find($id);
+        //     $country->delete();
+        // } catch (\Exception $e) {
+        //     DB::rollback();
+        //     Toastr::error(trans('Failed to delete the country. Please try again!'), 'Error', ["positionClass" => "toast-top-center"]);
+        //     return redirect()->route('admin.country.index');
+        // }
+        // DB::commit();
+        // Toastr::success(trans('Country deleted successfully!'), 'Success', ["positionClass" => "toast-top-center"]);
+        // return redirect()->route('admin.country.index');
     }
 }
