@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\Auth\LoginController as AdminLoginController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -115,6 +116,15 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:admi
         Route::get('{id}/delete', [CountryController::class, 'delete'])->name('delete');
     });
 
+    // Category
+    Route::group(['prefix' => 'category', 'as' => 'category.'], function () {
+        Route::get('/', [CategoryController::class, 'index'])->name('index');
+        Route::get('create', [CategoryController::class, 'create'])->name('create');
+        Route::post('store', [CategoryController::class, 'store'])->name('store');
+        Route::get('{id}/edit', [CategoryController::class, 'edit'])->name('edit');
+        Route::post('{id}/update', [CategoryController::class, 'update'])->name('update');
+        Route::get('{id}/delete', [CategoryController::class, 'delete'])->name('delete');
+    });
     // Region
     Route::group(['prefix' => 'region', 'as' => 'region.'], function () {
         Route::get('/', [RegionController::class, 'index'])->name('index');

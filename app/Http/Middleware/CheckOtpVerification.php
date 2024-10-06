@@ -22,7 +22,7 @@ class CheckOtpVerification
             if ($otpVerification) {
                 return redirect()->route('user.otp.form');
             } else {
-                return redirect()->route('user.otp.verification');
+                return redirect()->route('user.otp.send');
             }
         }
     

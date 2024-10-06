@@ -58,7 +58,7 @@
           </div>
           <div class="mb-3">
             <label class="form-label">Address</label>
-            <textarea name="address" id="address" cols="30" rows="4" class="form-control" placeholder="Enter Address">{{ old('address') }}</textarea>
+            <textarea name="address" id="address" cols="30" rows="1" class="form-control" placeholder="Enter Address">{{ old('address') }}</textarea>
           </div>
           <div class="mb-3">
             <label class="form-label">Password</label>

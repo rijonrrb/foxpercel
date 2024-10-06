@@ -49,21 +49,15 @@
                             <table id="dataTables" class="table table-hover text-nowrap jsgrid-table">
                                 <thead>
                                     <tr>
-                                        {{-- <th width="5%">SL</th> --}}
-                                        {{-- <th width ="10%">Image</th> --}}
-                                        <th width="25%">Name</th>
-                                        <th width="15%">Email</th>
-                                        <th width="10%">Status</th>
-                                        <th width="10%">Action</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse ($data['rows'] as $key => $row)
                                     <tr>
-                                        {{-- <td>{{ $key + 1 }}</td> --}}
-                                        {{-- <td>
-                                            <img src="{{ getPhoto($row->image) }}" class="img-fluid rounded-sm" width="80" height="80" alt="{{ $row->name }}">
-                                        </td> --}}
                                         <td>{{ $row->name }}</td>
                                         <td>{{ $row->email }}</td>
                                         <td>

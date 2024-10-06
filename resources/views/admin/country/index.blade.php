@@ -29,22 +29,19 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @if (isset($data['rows']) && count($data['rows']) > 0)
-                                                @foreach ($data['rows'] as $key => $row)
-                                                    <tr>
-                                                        <td>{{ $key + 1 }}</td>
-                                                        <td>{{ $row->name }}</td>
-                                                        <td>{{ $row->code }}</td>
-                                                        <td>
-                                                            <a href="javascript:void(0)"
-                                                                class="btn btn-secondary edit btn-sm"
-                                                                data-id="{{ $row->id }}">Edit</a>
-                                                            <a href="{{ route('admin.country.delete', $row->id) }}"
-                                                                id="deleteData" class="btn btn-danger btn-sm">Delete</a>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            @endif
+                                            @foreach ($data['rows'] as $key => $row)
+                                                <tr>
+                                                    <td>{{ $key + 1 }}</td>
+                                                    <td>{{ $row->name }}</td>
+                                                    <td>{{ $row->code }}</td>
+                                                    <td>
+                                                        <a href="javascript:void(0)" class="btn btn-secondary edit btn-sm"
+                                                            data-id="{{ $row->id }}">Edit</a>
+                                                        <a href="{{ route('admin.country.delete', $row->id) }}"
+                                                            id="deleteData" class="btn btn-danger btn-sm">Delete</a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -92,8 +89,6 @@
         </div>
     </div>
 
-
-
     {{-- edit modal --}}
     <div class="modal modal-blur fade" id="editCountryModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-md modal-dialog-centered" role="document">
@@ -109,7 +104,6 @@
             </div>
         </div>
     </div>
-
 @endsection
 
 @push('script')

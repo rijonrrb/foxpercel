@@ -12,6 +12,7 @@ use App\Http\Controllers\User\SettingsController;
 use App\Http\Controllers\User\AlarmController;
 use App\Http\Controllers\User\DefconLevelController;
 use App\Http\Controllers\User\NotificationController;
+use App\Http\Controllers\User\OrderController;
 use App\Http\Controllers\User\StaffController;
 use App\Http\Controllers\User\TwoFactorController;
 use App\Http\Controllers\User\UserDashboardController;
@@ -63,6 +64,11 @@ Route::group(['as' => 'user.', 'prefix' => 'user', 'middleware' => ['auth']], fu
         Route::group(['prefix' => 'settings', 'as' => 'settings.'], function () {
             Route::get('/', [SettingsController::class, 'index'])->name('index');
             Route::post('/store', [SettingsController::class, 'store'])->name('store');
+        });
+
+        Route::group(['prefix' => 'order', 'as' => 'order.'], function () {
+            Route::get('/', [OrderController::class, 'index'])->name('index');
+            Route::get('/create', [OrderController::class, 'create'])->name('create');
         });
     });
 

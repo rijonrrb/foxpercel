@@ -107,6 +107,7 @@ class OtpController extends Controller
                 return redirect()->back();
             }
         } catch (\Exception $e) {
+            dd($e);
             Toastr::error('An error occurred: ' . $e->getMessage(), 'Error', ["positionClass" => "toast-top-right"]);
             return redirect()->back();
         }
