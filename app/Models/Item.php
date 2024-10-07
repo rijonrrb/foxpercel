@@ -9,28 +9,29 @@ class Item extends Model
     protected $table = 'items';
 
     protected $fillable = [
+        'order_id',
         'item_category_id',
         'item_name',
         'item_price',
         'currency',
+        'item_link',
         'item_weight',
         'item_color',
         'item_size',
-        'item_model',
         'item_quantity',
+        'item_model',
         'note',
-        'prescription',
+        'image',
+        'prescription'
     ];
 
-    // Relationship with Category
     public function category()
     {
         return $this->belongsTo(Category::class, 'item_category_id');
     }
 
-    // Relationship with Order
-    // public function orders()
-    // {
-    //     return $this->hasMany(Order::class);
-    // }
+    public function orders()
+    {
+        return $this->belongsTo(Order::class, 'order_id');
+    }
 }

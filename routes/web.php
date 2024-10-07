@@ -69,6 +69,8 @@ Route::group(['as' => 'user.', 'prefix' => 'user', 'middleware' => ['auth']], fu
         Route::group(['prefix' => 'order', 'as' => 'order.'], function () {
             Route::get('/', [OrderController::class, 'index'])->name('index');
             Route::get('/create', [OrderController::class, 'create'])->name('create');
+            Route::post('/store', [OrderController::class, 'store'])->name('store');
+
         });
     });
 
