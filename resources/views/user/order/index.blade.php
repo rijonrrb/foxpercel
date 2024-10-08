@@ -1,5 +1,5 @@
 @extends('admin.layouts.master')
-@section('country', 'active')
+@section('order', 'active')
 @section('title') {{ $data['title'] ?? '' }} @endsection
 @section('nav_menu', $data['title'])
 @push('style')

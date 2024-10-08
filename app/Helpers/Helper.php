@@ -24,6 +24,13 @@ if (!function_exists('getNotification')) {
     }
 }
 
+if (!function_exists('getCountry')) {
+    function getCountry($id){
+        return DB::table('countries')->where('id', $id)->first();
+    }
+}
+
+
 function getUserIpAddr()
 {
     $hostname = gethostname();

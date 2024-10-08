@@ -70,6 +70,8 @@ Route::group(['as' => 'user.', 'prefix' => 'user', 'middleware' => ['auth']], fu
             Route::get('/', [OrderController::class, 'index'])->name('index');
             Route::get('/create', [OrderController::class, 'create'])->name('create');
             Route::post('/store', [OrderController::class, 'store'])->name('store');
+            Route::get('{id}/edit', [OrderController::class, 'edit'])->name('edit');
+            Route::post('{id}/update', [OrderController::class, 'update'])->name('update');
 
         });
     });

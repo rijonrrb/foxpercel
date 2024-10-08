@@ -72,6 +72,10 @@
             color: white;
 
         }
+        .form-control.disabled, .form-control:disabled {
+            background: #e5e5e5;
+            pointer-events: none;
+        }
     </style>
     @stack('style')
     <link href="//cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css">
