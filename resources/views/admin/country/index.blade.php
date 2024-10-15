@@ -25,6 +25,7 @@
                                                 <th width="5%">SN</th>
                                                 <th width="25%">Country Name</th>
                                                 <th width="25%">Country Code</th>
+                                                <th width="25%">Status</th>
                                                 <th width="15%">Action</th>
                                             </tr>
                                         </thead>
@@ -34,6 +35,13 @@
                                                     <td>{{ $key + 1 }}</td>
                                                     <td>{{ $row->name }}</td>
                                                     <td>{{ $row->code }}</td>
+                                                    <td>                                              
+                                                        @if ($row->status == 1)
+                                                            <span class="badge bg-success text-white">Active</span>
+                                                        @else
+                                                            <span class="badge bg-danger text-white">Inactive</span>
+                                                        @endif
+                                                    </td>
                                                     <td>
                                                         <a href="javascript:void(0)" class="btn btn-secondary edit btn-sm"
                                                             data-id="{{ $row->id }}">Edit</a>
@@ -78,6 +86,15 @@
                             <input type="text" name="code" id="code" class="form-control"
                                 placeholder="Country code" required>
                         </div>
+
+                        <div class="mb-3">
+                            <label for="code" class="form-label">Status</label>
+                            <select name="status" id="status" class="form-control form-select">
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
+                            </select>
+                        </div>
+
                     </div>
 
                     <div class="modal-footer">

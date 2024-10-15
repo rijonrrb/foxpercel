@@ -72,7 +72,7 @@ Route::group(['as' => 'user.', 'prefix' => 'user', 'middleware' => ['auth']], fu
             Route::post('/store', [OrderController::class, 'store'])->name('store');
             Route::get('{id}/edit', [OrderController::class, 'edit'])->name('edit');
             Route::post('{id}/update', [OrderController::class, 'update'])->name('update');
-
+            Route::post('couponApply', [OrderController::class, 'couponApply'])->name('coupon.apply');
         });
     });
 

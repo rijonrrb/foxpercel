@@ -7,10 +7,12 @@ use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CountryController;
+use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\CustomPageController;
 use App\Http\Controllers\Admin\LanguageController;
 use App\Http\Controllers\Admin\LocationController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\RegionController;
 use App\Http\Controllers\Admin\SettingsController;
 
@@ -116,6 +118,17 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:admi
         Route::get('{id}/delete', [CountryController::class, 'delete'])->name('delete');
     });
 
+    // Coupon
+    Route::group(['prefix' => 'coupon', 'as' => 'coupon.'], function () {
+        Route::get('/', [CouponController::class, 'index'])->name('index');
+        Route::get('create', [CouponController::class, 'create'])->name('create');
+        Route::post('store', [CouponController::class, 'store'])->name('store');
+        Route::get('{id}/edit', [CouponController::class, 'edit'])->name('edit');
+        Route::post('{id}/update', [CouponController::class, 'update'])->name('update');
+        Route::get('{id}/view', [CouponController::class, 'view'])->name('view');
+        Route::get('{id}/delete', [CouponController::class, 'delete'])->name('delete');
+    });
+
     // Category
     Route::group(['prefix' => 'category', 'as' => 'category.'], function () {
         Route::get('/', [CategoryController::class, 'index'])->name('index');
@@ -144,5 +157,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:admi
         Route::post('{id}/update', [CityController::class, 'update'])->name('update');
         Route::get('{id}/delete', [CityController::class, 'delete'])->name('delete');
         Route::get('country/region/{countryId?}', [CityController::class, 'CountryWiseRegion'])->name('countrywise.region');
+    });
+
+    // Order
+    Route::group(['prefix' => 'order', 'as' => 'order.'], function () {
+        Route::get('/', [OrderController::class, 'index'])->name('index');
+        // Route::get('/create', [OrderController::class, 'create'])->name('create');
+        // Route::post('/store', [OrderController::class, 'store'])->name('store');
+        Route::get('{id}/edit', [OrderController::class, 'edit'])->name('edit');
+        Route::post('{id}/update', [OrderController::class, 'update'])->name('update');
     });
 });

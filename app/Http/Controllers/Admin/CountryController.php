@@ -48,8 +48,9 @@ class CountryController extends Controller
         // }
 
         $this->validate($request, [
-            'name'          => 'required|unique:countries,name|max:100',
-            'code'          => 'required|max:10',
+            'name'      => 'required|unique:countries,name|max:100',
+            'code'      => 'required|max:10',
+            'status'    => 'required',
         ]);
 
         DB::beginTransaction();
@@ -58,6 +59,7 @@ class CountryController extends Controller
             $country = new Country();
             $country->name         = $request->name;
             $country->code         = $request->code;
+            $country->status       = $request->status;
             $country->save();
         } catch (\Exception $e) {
             DB::rollback();
@@ -86,8 +88,9 @@ class CountryController extends Controller
         //     abort(403, 'Sorry !! You are Unauthorized.');
         // }
         $this->validate($request, [
-            'name'   => 'max:100|unique:countries,name,'.$id,
-            'code'   => 'required|max:10',
+            'name'      => 'max:100|unique:countries,name,'.$id,
+            'code'      => 'required|max:10',
+            'status'    => 'required',
         ]);
 
         DB::beginTransaction();
@@ -96,6 +99,7 @@ class CountryController extends Controller
             $country = Country::find($id);
             $country->name         = $request->name;
             $country->code         = $request->code;
+            $country->status       = $request->status;
             $country->save();
         } catch (\Exception $e) {
             DB::rollback();

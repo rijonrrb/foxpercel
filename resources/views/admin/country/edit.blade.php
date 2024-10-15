@@ -12,6 +12,14 @@
             <input type="text" name="code" id="code" class="form-control" placeholder="Country code" required
                 value="{{ $country->code }}">
         </div>
+
+        <div class="mb-3">
+            <label for="status" class="form-label">Status</label>
+            <select name="status" id="status" class="form-control form-select">
+                <option value="1" {{ $country->status == 1? "selected" : "" }}>Active</option>
+                <option value="0" {{ $country->status == 0? "selected" : "" }}>Inactive</option>
+            </select>
+        </div>
     </div>
 
     <div class="modal-footer">

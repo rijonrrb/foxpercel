@@ -1,5 +1,5 @@
-@extends('user.layouts.master')
-@section('order-create', 'active')
+@extends('admin.layouts.master')
+@section('order', 'active')
 @section('title') {{ $data['title'] ?? '' }} @endsection
 @section('nav_menu', $data['title'])
 
@@ -9,9 +9,6 @@
 
 @push('style')
     <style>
-        .btn:disabled {
-            border: 0px solid !important;
-        }
         .progress_container {
             width: 350px;
             display: flex;
@@ -194,7 +191,7 @@
                 </div>
 
                 <!-- Percel Information (Step 1) -->
-                <div class="card @if ($data['order']->step != 1) d-none @endif" id="step1">
+                <div class="card" id="step1">
                     <div class="row">
                         <div class="col-md-12 d-flex flex-column">
                             <div class="card-header d-flex justify-content-between align-items-center">
@@ -202,7 +199,7 @@
                                 <button type="button" class="btn btn-success" id="add-item">Add Item</button>
                             </div>
                             <div class="card-body">
-                                <form action="{{ route('user.order.update', $data['order']->id) }}" method="POST"
+                                <form action="{{ route('admin.order.update', $data['order']->id) }}" method="POST"
                                     enctype="multipart/form-data">
                                     @csrf
                                     <input type="hidden" name="step" id="step" value="1">
@@ -357,14 +354,14 @@
                 </div>
 
                 <!-- Order Information (Step 2) -->
-                <div class="card @if ($data['order']->step != 2) d-none @endif" id="step2">
+                <div class="card" id="step2">
                     <div class="row">
                         <div class="col-md-12 d-flex flex-column">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h4 class="mb-0">Order Information</h4>
                             </div>
                             <div class="card-body">
-                                <form action="{{ route('user.order.update', $data['order']->id) }}" method="POST"
+                                <form action="{{ route('admin.order.update', $data['order']->id) }}" method="POST"
                                     enctype="multipart/form-data">
                                     <input type="hidden" name="step" id="step" value="2">
                                     @csrf
@@ -397,17 +394,12 @@
                                             </select>
                                         </div>
 
-                                        <div class="col-md-12 mb-3">
-                                            <label for="delivery_address" class="form-label">Delivery Address</label>
-                                            <textarea name="delivery_address" id="delivery_address" cols="30" rows="3" class="form-control"  placeholder="Delivery Address" required>{{ $data['order']->delivery_address }}</textarea>
-                                        </div>
-
                                         <div class="col-md-6 mb-3">
                                             <label for="total_gross_weight" class="form-label">Total Gross Weight
                                                 (lbs)</label>
                                             <input type="number" step="0.01" name="total_gross_weight"
                                                 value="{{ $data['order']->total_gross_weight }}" id="total_gross_weight"
-                                                class="form-control disabled" placeholder="0.00 lbs" readonly>
+                                                class="form-control disabled" placeholder="0.00 lbs">
                                         </div>
 
                                         <div class="col-md-6 mb-3">
@@ -423,14 +415,14 @@
                                             <label for="total_items" class="form-label">Total Items</label>
                                             <input type="number" name="total_items" id="total_items"
                                                 value="{{ $data['order']->total_item }}" class="form-control disabled"
-                                                placeholder="Total Items" readonly>
+                                                placeholder="Total Items">
                                         </div>
 
                                         <div class="col-md-6 mb-3">
                                             <label for="total_amount" class="form-label">Total Item Cost</label>
                                             <input type="number" name="total_amount" id="total_amount"
                                                 value="{{ $data['order']->total_amount }}" class="form-control disabled"
-                                                placeholder="Total Item Cost" readonly>
+                                                placeholder="Total Item Cost">
                                         </div>
                                     </div>
 
@@ -445,7 +437,7 @@
                 </div>
 
                 <!-- Order Overview (Step 3) -->
-                <div class="card @if ($data['order']->step != 3) d-none @endif" id="step3">
+                <div class="card" id="step3">
                     <div class="row">
                         <div class="col-md-12 d-flex flex-column">
                             <div class="card-header d-flex justify-content-between align-items-center">
@@ -593,24 +585,22 @@
                                                     $data['order']->total_amount +
                                                     $data['order']->shipping_amount;
                                             @endphp
-                                            <div id="coupon_discount">
-                                            </div>
                                             <div class="d-flex h4 mb-1 px-2">
                                                 <p class="">Grand Total</p>
-                                                <p class="ms-auto" id="grand_amount">
+                                                <p class="ms-auto">
                                                     {{ $item->currency }}{{ number_format($grand_total, 2) }}
                                                 </p>
                                             </div>
                                             <div class="coupon my-3">
                                                 <label class="form-label text-muted mb-2">Have a Coupon Code?</label>
-                                                <input type="hidden" name="order_id" id="orderNumberInput" value="{{$data['order']->order_number}}">
-                                                <input type="hidden" name="grand_total" id="amountInput" value="{{$grand_total}}">
                                                 <div class="input-group">
-                                                    <input class="form-control" id="couponCodeInput"
+                                                    <input class="form-control" id="paymentCouponCode"
                                                         placeholder="Enter Coupon Code" name="coupon_code" type="text"
                                                         style="height: 40px !important;">
-                                                    <button class="btn py-2 btn-success" type="button"
-                                                        id="coupon_btn" style="height: 40px !important;">Apply</button>
+                                                    <span
+                                                        class="btn input-group-text py-2 text-white apply-coupon-code-btn btn-success "
+                                                        id="applyCouponCodeBtn" data-plan-price="84"
+                                                        style="height: 40px !important;"> Apply </span>
                                                 </div>
                                             </div>
                                             <div class="row d-flex mt-4">
@@ -818,68 +808,4 @@
         });
         update();
     </script>
-<script>
-    $(document).ready(function () {
-        $('#coupon_btn').click(function () {
-            var couponCode = $('#couponCodeInput').val();
-            var orderNumber = $('#orderNumberInput').val();
-            var amount = $('#amountInput').val();
-            var btn = $(this);
-            var btnTxt = $(this).text();
-
-            if (!couponCode) {
-                toastr.error('Please enter a coupon code');
-                return;
-            }
-
-            $.ajax({
-                url: '{{ route('user.order.coupon.apply') }}',
-                type: 'POST',
-                data: {
-                    '_token': '{{ csrf_token() }}',
-                    'coupon_code': couponCode,
-                    'total_amount': amount,
-                    'order_number': orderNumber,
-                },
-                beforeSend: function () {
-                    btn.html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Applying..`).attr('disabled', true);
-                    $('body').css('cursor', 'wait');
-                },
-                success: function (response) {
-                    if ('error' in response) {
-                        toastr.error(response.error);
-                        btn.html(btnTxt).attr('disabled', false);
-                    } else {
-                        var discountedAmount = response.discountedAmount;
-                        var discount = response.discount;
-                        function formatCurrency(amount) {
-                            return parseFloat(amount).toFixed(2);
-                        }
-
-                        $('#total_price').html('Previous Amount');
-                        var newRow = '<div class="d-flex h4 mb-1 px-2"><p>Discount Amount</p><p class="ms-auto">{{ $item->currency }} ' + formatCurrency(discount) + '</p></div>';
-                        $('#coupon_discount').append(newRow);
-
-                        toastr.success('Coupon applied successfully');
-                        $('#couponCodeInput').val(couponCode).attr('disabled', true);
-                        $('#amountInput').val(formatCurrency(discountedAmount));
-                        $('#grand_amount').html('{{ $item->currency }} ' + formatCurrency(discountedAmount));
-
-                        btn.html('Applied').attr('disabled', true);
-                    }
-                },
-                error: function () {
-                    console.log('Error in the AJAX request');
-                    toastr.error('Something went wrong. Please try again.');
-                    btn.html(btnTxt).attr('disabled', false);
-                },
-                complete: function () {
-                    $('body').css('cursor', 'default');
-                }
-            });
-        });
-    });
-</script>
-
-
 @endpush

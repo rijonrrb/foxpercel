@@ -79,4 +79,8 @@ class User extends Authenticatable
         $this->save();
     }
 
+    public function coupons()
+    {
+        return $this->belongsToMany(Coupon::class, 'user_coupons', 'user_id', 'coupon_id');
+    }
 }
