@@ -173,14 +173,12 @@
                                                                 value="{{ old('item_price.' . $key) }}" required>
                                                             <select name="currency[]" id="currency"
                                                                 class="form-select select2" required>
-                                                                <option value="" class="d-none">Select Currency
-                                                                </option>
-                                                                <option value="$"
-                                                                    {{ old('currency.' . $key) == '$' ? 'selected' : '' }}>$
-                                                                </option>
-                                                                <option value="€"
-                                                                    {{ old('currency.' . $key) == '€' ? 'selected' : '' }}>€
-                                                                </option>
+                                                                <option value="" class="d-none">Select Currency</option>
+                                                                @foreach ($data['currencies'] as $currency)      
+                                                                    <option value="{{$currency->symbol}}"
+                                                                        {{ old('currency.' . $key) == $currency->symbol ? 'selected' : '' }}>{{$currency->symbol}}
+                                                                    </option>
+                                                                @endforeach
                                                             </select>
                                                         </div>
                                                     </div>

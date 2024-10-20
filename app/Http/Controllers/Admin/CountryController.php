@@ -49,7 +49,7 @@ class CountryController extends Controller
 
         $this->validate($request, [
             'name'      => 'required|unique:countries,name|max:100',
-            'code'      => 'required|max:10',
+            'code'      => 'required|max:10|unique:countries,code',
             'status'    => 'required',
         ]);
 
@@ -67,7 +67,7 @@ class CountryController extends Controller
             return redirect()->route('admin.country.index');
         }
         DB::commit();
-        Toastr::success(trans('Country Added Successfully!'), 'Success', ["positionClass" => "toast-top-center"]);
+        Toastr::success(trans('Country added successfully!'), 'Success', ["positionClass" => "toast-top-center"]);
         return redirect()->route('admin.country.index');
     }
 
@@ -89,7 +89,7 @@ class CountryController extends Controller
         // }
         $this->validate($request, [
             'name'      => 'max:100|unique:countries,name,'.$id,
-            'code'      => 'required|max:10',
+            'code'      => 'required|max:10|unique:countries,code,'.$id,
             'status'    => 'required',
         ]);
 

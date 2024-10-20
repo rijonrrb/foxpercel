@@ -263,12 +263,12 @@
                                                                 class="form-control w-50" value="{{ $item->item_price }}"
                                                                 required>
                                                             <select name="currency[]" class="form-select select2" required>
-                                                                <option value="$"
-                                                                    {{ $item->currency == '$' ? 'selected' : '' }}>$
-                                                                </option>
-                                                                <option value="€"
-                                                                    {{ $item->currency == '€' ? 'selected' : '' }}>€
-                                                                </option>
+                                                                <option value="" class="d-none">Select Currency</option>
+                                                                @foreach ($data['currencies'] as $currency)      
+                                                                    <option value="{{$currency->symbol}}"
+                                                                        {{ $item->currency == $currency->symbol ? 'selected' : '' }}>{{$currency->symbol}}
+                                                                    </option>
+                                                                @endforeach
                                                             </select>
                                                         </div>
                                                     </div>

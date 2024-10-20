@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Coupon;
+use App\Models\Currency;
 use App\Models\Item;
 use App\Models\Order;
 use App\Models\UserCoupon;
@@ -25,6 +26,7 @@ class OrderController extends Controller
     {
         $data['title'] = 'Order List';
         // $data['rows'] = Percel::orderBy('id', 'desc')->get();
+        $data['rows'] = Order::where('user_id', auth()->user()->id)->orderBy('id', 'desc')->get();
         return view('user.order.index', compact('data'));
     }
 
@@ -32,6 +34,7 @@ class OrderController extends Controller
     {
         $data['title'] = 'Order Details';
         $data['categories'] = Category::where('status', 1)->orderBy('order_number', 'asc')->get();
+        $data['currencies'] = Currency::where('status', 1)->orderBy('name', 'asc')->get();
         return view('user.order.create', compact('data'));
     }
 
@@ -73,7 +76,7 @@ class OrderController extends Controller
             $order->shipping_amount = 0;
             $order->apply_coupon = 0;
             $order->step = 1;
-            $order->status = 'pending';
+            $order->status = 'incomplete';
             $order->payment_status = 'pending';
             $order->save();
     
@@ -137,6 +140,7 @@ class OrderController extends Controller
     {
         $data['title'] = 'Order Details';
         $data['categories'] = Category::where('status', 1)->orderBy('order_number', 'asc')->get();
+        $data['currencies'] = Currency::where('status', 1)->orderBy('name', 'asc')->get();
         $data['order'] = Order::findOrFail($id);
         $data['items'] = Item::where('order_id', $id)->get();
         $data['countries'] = Country::where('status', 1)->get();
@@ -256,6 +260,9 @@ class OrderController extends Controller
                 $order->total_item = array_sum($request->item_quantity);
                 $order->total_gross_weight = $total_gross_weight;
                 $order->total_amount = $total_amount;
+            } elseif($request->step == 3) {
+                $order->total_amount = $request->grand_total;
+                $order->status = 'pending';
             }
             $order->save();
 
@@ -267,6 +274,11 @@ class OrderController extends Controller
         }
         DB::commit();
         Toastr::success('Item information successfully updated');
+
+        if($request->step == 3) {
+            return redirect()->route('user.order.index');
+        }
+
         return redirect()->route('user.order.edit', $order->id);
     }
 

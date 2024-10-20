@@ -266,12 +266,12 @@
                                                                 class="form-control w-50" value="{{ $item->item_price }}"
                                                                 required>
                                                             <select name="currency[]" class="form-select select2" required>
-                                                                <option value="$"
-                                                                    {{ $item->currency == '$' ? 'selected' : '' }}>$
-                                                                </option>
-                                                                <option value="€"
-                                                                    {{ $item->currency == '€' ? 'selected' : '' }}>€
-                                                                </option>
+                                                                <option value="" class="d-none">Select Currency</option>
+                                                                @foreach ($data['currencies'] as $currency)      
+                                                                    <option value="{{$currency->symbol}}"
+                                                                        {{ $item->currency == $currency->symbol ? 'selected' : '' }}>{{$currency->symbol}}
+                                                                    </option>
+                                                                @endforeach
                                                             </select>
                                                         </div>
                                                     </div>
@@ -457,201 +457,206 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <div class="row m-0">
-                                    <div class="col-md-7 col-12">
-                                        <div class="row">
-                                            <div class="col-12 mb-4">
-                                                @foreach ($data['items'] as $key => $item)
-                                                    <div class="row box-right align-items-center mb-4">
-                                                        <div class="col-md-4 ps-0">
-                                                            <p class="text-muted fw-bold h6 mb-0">Item {{ $key + 1 }}
-                                                            </p>
-                                                            <p class="h2 fw-bold">
-                                                                {{ $item->item_name }} <br>
-                                                                <small class="h5">
-                                                                    <a href="{{ $item->item_link }}" target="_blank"
-                                                                        rel="noopener noreferrer" class="text-primary">
-                                                                        Click to view the item
-                                                                    </a>
-                                                                </small>
-                                                            </p>
-                                                            <span
-                                                                class="text-muted pe-1 h6 align-text-top mt-1">{{ $item->currency }}</span>{{ number_format($item->item_price, 2) }}
-                                                        </div>
-                                                        <div class="col-md-8">
-                                                            <div class="row gy-4 row-cols-2 row-cols-md-3">
-                                                                <div
-                                                                    class="col specification-item d-flex align-items-center">
-                                                                    <div class="icon me-3">
-                                                                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  
-                                                                            stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon-tabler icons-tabler-outline icon-tabler-weight">
-                                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 6m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
-                                                                            <path d="M6.835 9h10.33a1 1 0 0 1 .984 .821l1.637 9a1 1 0 0 1 -.984 1.179h-13.604a1 1 0 0 1 -.984 -1.179l1.637 -9a1 1 0 0 
-                                                                            1 .984 -.821z" />
-                                                                        </svg>
-                                                                    </div>
-                                                                    <div class="specification-item-cont">
-                                                                        <h6 class="specification-item-title mb-0">Gross
-                                                                            Weight:</h6>
-                                                                        <span>{{ number_format($item->item_weight, 2) }}
-                                                                            lbs</span>
-                                                                    </div>
-                                                                </div>
-                                                                <div
-                                                                    class="col specification-item d-flex align-items-center">
-                                                                    <div class="icon me-3">
-                                                                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  
-                                                                            stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  
-                                                                            stroke-linejoin="round"  class="icon-tabler icons-tabler-outline icon-tabler-dimensions">
-                                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 5h11" /><path d="M12 7l2 -2l-2 -2" />
-                                                                            <path d="M5 3l-2 2l2 2" /><path d="M19 10v11" /><path d="M17 19l2 2l2 -2" /><path d="M21 12l-2 -2l-2 2" />
-                                                                            <path d="M3 10m0 2a2 2 0 0 1 2 -2h7a2 2 0 0 1 2 2v7a2 2 0 0 1 -2 2h-7a2 2 0 0 1 -2 -2z" />
-                                                                        </svg>
-                                                                    </div>
-                                                                    <div class="specification-item-cont">
-                                                                        <h6 class="specification-item-title mb-0">Dimension
-                                                                            Weight:</h6>
-                                                                        <span>{{ number_format(0, 2) }} lbs</span>
-                                                                    </div>
-                                                                </div>
-                                                                <div
-                                                                    class="col specification-item d-flex align-items-center">
-                                                                    <div class="icon me-3">
-                                                                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  
-                                                                            fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  
-                                                                            class="icon-tabler icons-tabler-outline icon-tabler-stack-3"><path stroke="none" d="M0 0h24v24H0z" 
-                                                                            fill="none"/><path d="M12 2l-8 4l8 4l8 -4l-8 -4" /><path d="M4 10l8 4l8 -4" /><path d="M4 18l8 4l8 -4" />
-                                                                            <path d="M4 14l8 4l8 -4" />
-                                                                        </svg>
-                                                                    </div>
-                                                                    <div class="specification-item-cont">
-                                                                        <h6 class="specification-item-title mb-0">Quantity:
-                                                                        </h6>
-                                                                        <span>{{ $item->item_quantity }}</span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                            <div class="col-12 px-0 mb-4">
-                                                <div class="box-right">
-                                                    <div class="d-flex pb-2">
-                                                        <p class="fw-bold h7">
-                                                            <span class="textmuted">Delivery Information
-                                                        </p>
-                                                    </div>
-                                                    <div class="p-2">
-                                                        <p class="h4">
-                                                            From {{$data['order']->shopping_from_country}} to {{$data['order']->delivery_country}}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-5 col-12 ps-md-5 p-0 ">
-                                        <div class="box-left">
-                                            <p class="fw-bold h7">{{ auth()->user()->name }}</p>
-                                            <p class="textmuted h8">{{ auth()->user()->address }}</p>
-                                            <table class="table table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th scope="col">Items</th>
-                                                        <th scope="col">Qty</th>
-                                                        <th scope="col">Price</th>
-                                                        <th scope="col">Total</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
+                                <form action="{{ route('user.order.update', $data['order']->id) }}" method="POST"
+                                    enctype="multipart/form-data">
+                                    @csrf
+                                    <input type="hidden" name="step" id="step" value="3">
+                                    <div class="row m-0">
+                                        <div class="col-md-7 col-12">
+                                            <div class="row">
+                                                <div class="col-12 mb-4">
                                                     @foreach ($data['items'] as $key => $item)
-                                                        <tr>
-                                                            <td>{{ $item->item_name }}</td>
-                                                            <td>{{ $item->item_quantity }}</td>
-                                                            <td>{{ $item->currency }}{{ $item->item_price }}</td>
-                                                            <td>{{ $item->currency }}{{ number_format($item->item_quantity * $item->item_price, 2) }}
-                                                            </td>
-                                                        </tr>
+                                                        <div class="row box-right align-items-center mb-4">
+                                                            <div class="col-md-4 ps-0">
+                                                                <p class="text-muted fw-bold h6 mb-0">Item {{ $key + 1 }}
+                                                                </p>
+                                                                <p class="h2 fw-bold">
+                                                                    {{ $item->item_name }} <br>
+                                                                    <small class="h5">
+                                                                        <a href="{{ $item->item_link }}" target="_blank"
+                                                                            rel="noopener noreferrer" class="text-primary">
+                                                                            Click to view the item
+                                                                        </a>
+                                                                    </small>
+                                                                </p>
+                                                                <span
+                                                                    class="text-muted pe-1 h6 align-text-top mt-1">{{ $item->currency }}</span>{{ number_format($item->item_price, 2) }}
+                                                            </div>
+                                                            <div class="col-md-8">
+                                                                <div class="row gy-4 row-cols-2 row-cols-md-3">
+                                                                    <div
+                                                                        class="col specification-item d-flex align-items-center">
+                                                                        <div class="icon me-3">
+                                                                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  
+                                                                                stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon-tabler icons-tabler-outline icon-tabler-weight">
+                                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 6m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
+                                                                                <path d="M6.835 9h10.33a1 1 0 0 1 .984 .821l1.637 9a1 1 0 0 1 -.984 1.179h-13.604a1 1 0 0 1 -.984 -1.179l1.637 -9a1 1 0 0 
+                                                                                1 .984 -.821z" />
+                                                                            </svg>
+                                                                        </div>
+                                                                        <div class="specification-item-cont">
+                                                                            <h6 class="specification-item-title mb-0">Gross
+                                                                                Weight:</h6>
+                                                                            <span>{{ number_format($item->item_weight, 2) }}
+                                                                                lbs</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div
+                                                                        class="col specification-item d-flex align-items-center">
+                                                                        <div class="icon me-3">
+                                                                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  
+                                                                                stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  
+                                                                                stroke-linejoin="round"  class="icon-tabler icons-tabler-outline icon-tabler-dimensions">
+                                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 5h11" /><path d="M12 7l2 -2l-2 -2" />
+                                                                                <path d="M5 3l-2 2l2 2" /><path d="M19 10v11" /><path d="M17 19l2 2l2 -2" /><path d="M21 12l-2 -2l-2 2" />
+                                                                                <path d="M3 10m0 2a2 2 0 0 1 2 -2h7a2 2 0 0 1 2 2v7a2 2 0 0 1 -2 2h-7a2 2 0 0 1 -2 -2z" />
+                                                                            </svg>
+                                                                        </div>
+                                                                        <div class="specification-item-cont">
+                                                                            <h6 class="specification-item-title mb-0">Dimension
+                                                                                Weight:</h6>
+                                                                            <span>{{ number_format(0, 2) }} lbs</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div
+                                                                        class="col specification-item d-flex align-items-center">
+                                                                        <div class="icon me-3">
+                                                                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  
+                                                                                fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  
+                                                                                class="icon-tabler icons-tabler-outline icon-tabler-stack-3"><path stroke="none" d="M0 0h24v24H0z" 
+                                                                                fill="none"/><path d="M12 2l-8 4l8 4l8 -4l-8 -4" /><path d="M4 10l8 4l8 -4" /><path d="M4 18l8 4l8 -4" />
+                                                                                <path d="M4 14l8 4l8 -4" />
+                                                                            </svg>
+                                                                        </div>
+                                                                        <div class="specification-item-cont">
+                                                                            <h6 class="specification-item-title mb-0">Quantity:
+                                                                            </h6>
+                                                                            <span>{{ $item->item_quantity }}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     @endforeach
-                                                </tbody>
-                                            </table>
-                                            <div class="d-flex h4 mb-1 px-2">
-                                                <p class="">Total Amount</p>
-                                                <p class="ms-auto">
-                                                    {{ $item->currency }}{{ number_format($data['order']->total_amount, 2) }}
-                                                </p>
-                                            </div>
-                                            <div class="d-flex h4 mb-1 px-2">
-                                                <p class="">Shipping Charge</p>
-                                                <p class="ms-auto">
-                                                    ${{ number_format($data['order']->shipping_amount, 2) }}
-                                                </p>
-                                            </div>
-                                            @php
-                                                $grand_total =
-                                                    $data['order']->total_amount +
-                                                    $data['order']->shipping_amount;
-                                            @endphp
-                                            <div id="coupon_discount">
-                                            </div>
-                                            <div class="d-flex h4 mb-1 px-2">
-                                                <p class="">Grand Total</p>
-                                                <p class="ms-auto" id="grand_amount">
-                                                    {{ $item->currency }}{{ number_format($grand_total, 2) }}
-                                                </p>
-                                            </div>
-                                            <div class="coupon my-3">
-                                                <label class="form-label text-muted mb-2">Have a Coupon Code?</label>
-                                                <input type="hidden" name="order_id" id="orderNumberInput" value="{{$data['order']->order_number}}">
-                                                <input type="hidden" name="grand_total" id="amountInput" value="{{$grand_total}}">
-                                                <div class="input-group">
-                                                    <input class="form-control" id="couponCodeInput"
-                                                        placeholder="Enter Coupon Code" name="coupon_code" type="text"
-                                                        style="height: 40px !important;">
-                                                    <button class="btn py-2 btn-success" type="button"
-                                                        id="coupon_btn" style="height: 40px !important;">Apply</button>
                                                 </div>
-                                            </div>
-                                            <div class="row d-flex mt-4">
-                                                {{-- <div class="col-md-12 mb-3">
-                                                    <h3 class="px-1 mb-0">Choose your payment method :</h3>
-                                                </div>
-                                                <div class="col-md-6 mb-3">
-                                                    <label class="form-selectgroup-item flex-fill">
-                                                        <input type="radio" name="payment_gateway_id" value="1"
-                                                            checked="" class="form-selectgroup-input ">
-                                                        <div class="form-selectgroup-label d-flex align-items-center p-3">
-                                                            <div class="me-3">
-                                                                <span class="form-selectgroup-check"></span>
-                                                            </div>
-                                                            <div>
-                                                                <span class="payment payment-provider-paypal me-2"></span>
-                                                            </div>
+                                                <div class="col-12 px-0 mb-4">
+                                                    <div class="box-right">
+                                                        <div class="d-flex pb-2">
+                                                            <p class="fw-bold h7">
+                                                                <span class="textmuted">Delivery Information
+                                                            </p>
                                                         </div>
-                                                    </label>
-                                                </div>
-                                                <div class="col-md-6 mb-3">
-                                                    <label class="form-selectgroup-item flex-fill">
-                                                        <input type="radio" name="payment_gateway_id" value="2"
-                                                            checked="" class="form-selectgroup-input ">
-                                                        <div class="form-selectgroup-label d-flex align-items-center p-3">
-                                                            <div class="me-3">
-                                                                <span class="form-selectgroup-check"></span>
-                                                            </div>
-                                                            <div>
-                                                                <span class="payment payment-provider-stripe me-2"></span>
-                                                            </div>
+                                                        <div class="p-2">
+                                                            <p class="h4">
+                                                                From {{$data['order']->shopping_from_country}} to {{$data['order']->delivery_country}}
+                                                            </p>
                                                         </div>
-                                                    </label>
-                                                </div> --}}
-                                                <div class="btn btn-primary d-block h8">Submit
-                                                    <span class="ms-3 fas fa-arrow-right"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5 col-12 ps-md-5 p-0 ">
+                                            <div class="box-left">
+                                                <p class="fw-bold h7">{{ auth()->user()->name }}</p>
+                                                <p class="textmuted h8">{{ auth()->user()->address }}</p>
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Items</th>
+                                                            <th scope="col">Qty</th>
+                                                            <th scope="col">Price</th>
+                                                            <th scope="col">Total</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach ($data['items'] as $key => $item)
+                                                            <tr>
+                                                                <td>{{ $item->item_name }}</td>
+                                                                <td>{{ $item->item_quantity }}</td>
+                                                                <td>{{ $item->currency }}{{ $item->item_price }}</td>
+                                                                <td>{{ $item->currency }}{{ number_format($item->item_quantity * $item->item_price, 2) }}
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                                <div class="d-flex h4 mb-1 px-2">
+                                                    <p class="">Total Amount</p>
+                                                    <p class="ms-auto">
+                                                        {{ $item->currency }}{{ number_format($data['order']->total_amount, 2) }}
+                                                    </p>
+                                                </div>
+                                                <div class="d-flex h4 mb-1 px-2">
+                                                    <p class="">Shipping Charge</p>
+                                                    <p class="ms-auto">
+                                                        ${{ number_format($data['order']->shipping_amount, 2) }}
+                                                    </p>
+                                                </div>
+                                                @php
+                                                    $grand_total =
+                                                        $data['order']->total_amount +
+                                                        $data['order']->shipping_amount;
+                                                @endphp
+                                                <div id="coupon_discount">
+                                                </div>
+                                                <div class="d-flex h4 mb-1 px-2">
+                                                    <p class="">Grand Total</p>
+                                                    <p class="ms-auto" id="grand_amount">
+                                                        {{ $item->currency }}{{ number_format($grand_total, 2) }}
+                                                    </p>
+                                                </div>
+                                                <div class="coupon my-3">
+                                                    <label class="form-label text-muted mb-2">Have a Coupon Code?</label>
+                                                    <input type="hidden" name="order_id" id="orderNumberInput" value="{{$data['order']->order_number}}">
+                                                    <input type="hidden" name="grand_total" id="amountInput" value="{{$grand_total}}">
+                                                    <div class="input-group">
+                                                        <input class="form-control" id="couponCodeInput" @if($data['order']->apply_coupon == 1) disabled @endif
+                                                            placeholder="Enter Coupon Code" name="coupon_code" type="text"
+                                                            style="height: 40px !important;">
+                                                        <button class="btn py-2 btn-success" type="button" @if($data['order']->apply_coupon == 1) disabled @endif
+                                                            id="coupon_btn" style="height: 40px !important;">Apply</button>
+                                                    </div>
+                                                </div>
+                                                <div class="row d-flex mt-4">
+                                                    {{-- <div class="col-md-12 mb-3">
+                                                        <h3 class="px-1 mb-0">Choose your payment method :</h3>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-selectgroup-item flex-fill">
+                                                            <input type="radio" name="payment_gateway_id" value="1"
+                                                                checked="" class="form-selectgroup-input ">
+                                                            <div class="form-selectgroup-label d-flex align-items-center p-3">
+                                                                <div class="me-3">
+                                                                    <span class="form-selectgroup-check"></span>
+                                                                </div>
+                                                                <div>
+                                                                    <span class="payment payment-provider-paypal me-2"></span>
+                                                                </div>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-selectgroup-item flex-fill">
+                                                            <input type="radio" name="payment_gateway_id" value="2"
+                                                                checked="" class="form-selectgroup-input ">
+                                                            <div class="form-selectgroup-label d-flex align-items-center p-3">
+                                                                <div class="me-3">
+                                                                    <span class="form-selectgroup-check"></span>
+                                                                </div>
+                                                                <div>
+                                                                    <span class="payment payment-provider-stripe me-2"></span>
+                                                                </div>
+                                                            </div>
+                                                        </label>
+                                                    </div> --}}
+                                                    <button type="submit" class="btn btn-primary d-block h8">Submit
+                                                        <span class="ms-3 fas fa-arrow-right"></span>
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
                     </div>

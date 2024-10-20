@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Currency;
 use App\Models\Item;
 use App\Models\Order;
 use Brian2694\Toastr\Facades\Toastr;
@@ -22,7 +23,7 @@ class OrderController extends Controller
     public function index()
     {
         $data['title'] = 'Order List';
-        $data['rows'] = Order::orderBy('id', 'desc')->get();
+        $data['rows'] = Order::where('status', '!=', 'incomplete')->orderBy('id', 'desc')->get();
         return view('admin.order.index', compact('data'));
     }
 
@@ -126,6 +127,7 @@ class OrderController extends Controller
     {
         $data['title'] = 'Order Details';
         $data['categories'] = Category::where('status', 1)->orderBy('order_number', 'asc')->get();
+        $data['currencies'] = Currency::where('status', 1)->orderBy('name', 'asc')->get();
         $data['order'] = Order::findOrFail($id);
         $data['items'] = Item::where('order_id', $id)->get();
         $data['countries'] = Country::where('status', 1)->get();

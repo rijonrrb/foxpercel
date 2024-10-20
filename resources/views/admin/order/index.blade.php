@@ -30,7 +30,6 @@
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
-                                        
                                         <tbody>
                                             @foreach ($data['rows'] as $key => $row)
                                                 <tr>

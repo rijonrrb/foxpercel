@@ -1,157 +1,78 @@
 @extends('admin.layouts.master')
-
 @section('customer', 'active')
 @section('title') {{ $data['title'] ?? '' }} @endsection
+@section('nav_menu', $data['title'])
 
-@push('style')
-<style>
-    .custom-img {
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        padding: 5px;
-        width: 100px;
-        height: 90px;
-    }
-</style>
-@endpush
 @php
     $user = $data['user'];
-    $role = $data['role'];
 @endphp
+
 @section('content')
-<div class="content-wrapper">
-    <div class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1 class="m-0">{{ $data['title'] ?? '' }}</h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">{{ $data['title'] ?? '' }}</li>
-                    </ol>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="row align-items-center">
-                                <div class="col-6">
-                                    <h3 class="card-title">{{ $data['title'] ?? '' }} </h3>
-                                </div>
-                                <div class="col-6">
-                                    <div class="float-right">
-                                        {{-- @if (Auth::user()->can('admin.customer.index')) --}}
-                                        <a href="{{ route('admin.customer.index') }}"  class="btn btn-primary">Back</a>
-                                        {{-- @endif --}}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="card-body">
+    <div class="container-xl">
+        <div class="content-wrapper">
+            <div class="content">
+                <div class="card">
+                    <div class="row">
+                        <div class="col-md-12 d-flex flex-column">
                             <form action="{{ route('admin.customer.update',$user->id) }}" method="post" enctype="multipart/form-data">
                                 @csrf
-                                <div class="row">
-                                    {{-- <div class="col-lg-12">
-                                        <div class="form-group">
-                                            <label for="image" class="form-lable">Image  <span class="text-danger">({{ __('Recommended size : 250x250') }})</span></label>
-                                            <input type="file" name="image" id="image" class="form-control" >
-                                            <img class="custom-img mt-2" src="{{ getPhoto($user->image) }}" alt="{{ $user->name }}" width="100" height="100">
+                                <div class="card-body">
+                                    <h2 class="mb-4">User Information</h2>
+                                    <h3 class="card-title">Profile Image</h3>
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <span class="preview avatar avatar-xl" style="background-image: url('{{ getPhoto($user->image) }}');"></span>
                                         </div>
-                                    </div> --}}
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label for="name" class="form-lable">Name <span class="text-danger">*</span></label>
-                                            <input type="text" name="name" value="{{ $user->name }}" id="name" class="form-control" required>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label for="email" class="form-lable">Email <span class="text-danger">*</span></label>
-                                            <input type="email" name="email" value="{{ $user->email }}"  id="email" class="form-control" required>
+                                        <div class="col-auto">
+                                            <a href="javascript:void(0)" class="btn" id="changeAvatarBtn">
+                                                Change avatar
+                                            </a>
+                                            <input type="file" name="image" id="image" accept="image/*" hidden>
                                         </div>
                                     </div>
-
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label for="phone" class="form-lable">Phone <span class="text-danger">*</span></label>
-
-                                            <div class="input-group">
-                                                <span class="input-group-text  shadow">+45</span>
-                                            <input type="tel" name="phone" id="phone" value="{{ $user->phone }}"  class="form-control" required
-                                                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
-                                            </div>
-                                            </div>
-                                    </div>
-                                     <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label for="status" class="form-lable">Published Status <span class="text-danger">*</span></label>
+                                    <div class="row g-3 mt-3">
+                                        <div class="col-md-6">
+                                            <div class="form-label">Name</div>
+                                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" required value="{{$user->name}}">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-label">Email</div>
+                                            <input type="text" name="email" class="form-control @error('email') is-invalid @enderror" required value="{{$user->email}}">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-label">Phone</div>
+                                            <input type="text" name="phone" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" required
+                                                class="form-control @error('phone') is-invalid @enderror" value="{{$user->phone}}">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-label">Published Status</div>
                                             <select name="status" id="status" class="form-control" required>
                                                 <option value="1" {{ $user->status == 1? "selected" : "" }}>Active</option>
                                                 <option value="0" {{ $user->status == 0? "selected" : "" }}>Inactive</option>
                                             </select>
                                         </div>
-                                    </div>
-                                    {{-- <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label for="ip_address" class="form-lable">Customer IP Address<span class="text-danger">*</span></label>
-                                            <input type="text" name="ip_address" value="{{ $user->ip_address }}" class="form-control">
-                                        </div>
-                                    </div> --}}
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label for="ip_address" class="form-label">IP Address <span class="text-danger">*</span></label>
-                                            <select id="ip_address" name="ip_address[]"  class="form-control selectit-container" multiple="multiple">
-                                                @php
-                                                    $ipAddresses = json_decode($user->ip_address, true) ?? [];
-                                                @endphp
-                                                @foreach($ipAddresses as $ip)  
-                                                    <option value="{{ $ip }}" selected>{{ $ip }} </option>
-                                                @endforeach
-                                            </select>
+                                        <div class="col-md-12">
+                                            <div class="form-label">Address</div>
+                                            <textarea name="address" id="address" class="form-control" cols="30" rows="5">{{$user->address}}</textarea>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4">
-                                        <label class="form-label required">{{ __('2FA Verification') }} <span class="text-danger">*</span></label>
-                                        <select class="form-select form-control" name="authenticator" required>
-                                            <option value="0"
-                                                {{ $user->authenticator == '0' ? 'selected' : '' }}>
-                                                {{ __('Disabled') }}</option>
-                                            <option value="1"
-                                                {{ $user->authenticator == '1' ? 'selected' : '' }}>
-                                                {{ __('Enabled') }}</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="form-group">
-                                            <label for="address" class="form-lable">Address <span class="text-danger">*</span></label>
-                                            <textarea name="address" id="address" class="form-control" required rows="3">{{ $user->address }}</textarea>
-                                        </div>
+                                    <h3 class="card-title mt-4">Password</h3>
+                                    <p class="card-subtitle">If you wish, you can set a new password by clicking 'Set New Password'</p>
+                                    <div>
+                                        <a href="#" class="btn" data-bs-toggle="modal"
+                                            data-bs-target="#changePasswordModal">
+                                            Set New Password
+                                        </a>
                                     </div>
                                 </div>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label for="password" class="form-lable">Password</label>
-                                            <input type="password" name="password"  id="password" class="form-control">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <button type="submit" class="btn btn-success">Update Customer</button>
-                                        </div>
+                                <div class="card-footer bg-transparent mt-auto">
+                                    <div class="btn-list justify-content-end">
+                                        <a href="{{route('admin.customer.index')}}" class="btn">
+                                            Cancel
+                                        </a>
+                                        <button type="submit" class="btn btn-primary">
+                                            Submit
+                                        </button>
                                     </div>
                                 </div>
                             </form>
@@ -161,11 +82,134 @@
             </div>
         </div>
     </div>
-</div>
 
+    {{-- Password Edit Modal --}}
+    <div class="modal modal-blur fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title">Change Password</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
 
+                <!-- Form -->
+                <form action="{{ route('admin.customer.password.update', $user->id) }}" method="post">
+                    @csrf
+                    <!-- Modal Body -->
+                    <div class="modal-body">
+                        <!-- Password Input -->
+                        <div class="mb-3">
+                            <label class="form-label">New Password</label>
+                            <div class="input-group input-group-flat">
+                                <input type="password" name="password" id="password" class="form-control" autocomplete="off" required>
+                                <span class="input-group-text">
+                                    <a href="javascript:void(0)" class="link-secondary" id="togglePasswordIcon" title="Show password">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                            <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                            <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                                        </svg>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
 
+                        <!-- Confirm Password Input -->
+                        {{-- <div class="mb-3">
+                            <label class="form-label">Confirm New Password</label>
+                            <div class="input-group input-group-flat">
+                                <input type="password" name="confirm_password" id="confirm_password" class="form-control" autocomplete="off" required>
+                                <span class="input-group-text">
+                                    <a href="javascript:void(0)" class="link-secondary" id="toggleConfirmPasswordIcon" title="Show password">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                            <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                            <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                                        </svg>
+                                    </a>
+                                </span>
+                            </div>
+                        </div> --}}
+                    </div>
+
+                    <!-- Modal Footer -->
+                    <div class="modal-footer">
+                        <a href="javascript:void(0)" class="btn btn-danger" data-bs-dismiss="modal">
+                            Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary ms-auto">
+                            Update
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 
+@push('script')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordInput = document.getElementById('password');
+            const togglePasswordIcon = document.querySelector('.input-group-text a#togglePasswordIcon');
+            let isPasswordVisible = false;
 
+            // Toggle password visibility for "password" field
+            togglePasswordIcon.addEventListener('click', function(e) {
+                e.preventDefault();
 
+                if (isPasswordVisible) {
+                    passwordInput.type = 'password';
+                    togglePasswordIcon.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" 
+                    stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                    <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                </svg>
+            `;
+                } else {
+                    passwordInput.type = 'text';
+                    togglePasswordIcon.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" 
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                     class="icon icon-tabler icons-tabler-outline icon-tabler-eye-off">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M10.585 10.587a2 2 0 0 0 2.829 2.828" />
+                    <path d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 
+                             4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 
+                             -2.138 2.87" />
+                    <path d="M3 3l18 18" />
+                </svg>
+            `;
+                }
+
+                isPasswordVisible = !isPasswordVisible;
+            });
+
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const changeAvatarBtn = document.getElementById('changeAvatarBtn');
+            const imageInput = document.getElementById('image');
+            const preview = document.querySelector('.preview');
+    
+            changeAvatarBtn.addEventListener('click', function() {
+                imageInput.click();
+            });
+    
+            imageInput.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        preview.style.backgroundImage = `url(${e.target.result})`;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+    </script>
+@endpush

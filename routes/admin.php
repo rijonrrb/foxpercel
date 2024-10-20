@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Admin\CurrencyController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\CustomPageController;
 use App\Http\Controllers\Admin\LanguageController;
@@ -84,6 +85,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:admi
         Route::post('{id}/update', [CustomerController::class, 'update'])->name('update');
         Route::get('{id}/view', [CustomerController::class, 'view'])->name('view');
         Route::get('{id}/delete', [CustomerController::class, 'delete'])->name('delete');
+        Route::post('{id}/password-update', [CustomerController::class, 'passwordUpdate'])->name('password.update');
     });
 
     // Locations
@@ -116,6 +118,17 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:admi
         Route::get('{id}/edit', [CountryController::class, 'edit'])->name('edit');
         Route::post('{id}/update', [CountryController::class, 'update'])->name('update');
         Route::get('{id}/delete', [CountryController::class, 'delete'])->name('delete');
+    });
+
+
+    // Currency
+    Route::group(['prefix' => 'currency', 'as' => 'currency.'], function () {
+        Route::get('/', [CurrencyController::class, 'index'])->name('index');
+        Route::get('create', [CurrencyController::class, 'create'])->name('create');
+        Route::post('store', [CurrencyController::class, 'store'])->name('store');
+        Route::get('{id}/edit', [CurrencyController::class, 'edit'])->name('edit');
+        Route::post('{id}/update', [CurrencyController::class, 'update'])->name('update');
+        Route::get('{id}/delete', [CurrencyController::class, 'delete'])->name('delete');
     });
 
     // Coupon

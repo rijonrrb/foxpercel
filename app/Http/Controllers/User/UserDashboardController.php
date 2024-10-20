@@ -48,8 +48,8 @@ class UserDashboardController extends Controller
 
             if ($request->hasFile('image')) {
 
-                if (File::exists(public_path($user->image))) {
-                    File::delete(public_path($user->image));
+                if (File::exists($user->image)) {
+                    File::delete($user->image);
                 }
 
                 $image = $request->file('image');

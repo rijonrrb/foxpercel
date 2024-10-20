@@ -17,6 +17,7 @@ use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
 use Intervention\Image\Facades\Image;
 
 class CustomerController extends Controller
@@ -43,8 +44,8 @@ class CustomerController extends Controller
             // abort(403, 'Sorry !! You are Unauthorized.');
         // }
 
-        $data['title'] = 'Customers';
-        $data['rows'] = User::where('role_id', 1)->latest()->paginate(20);
+        $data['title'] = 'User-List';
+        $data['rows'] = User::orderBy('name', 'asc')->get();
         return view('admin.customer.index', compact('data'));
     }
 
@@ -52,8 +53,7 @@ class CustomerController extends Controller
         // if (is_null($this->user) || !$this->user->can('admin.customer.create')) {
         //     abort(403, 'Sorry !! You are Unauthorized.');
         // }
-        $data['title'] = 'Customer Create';
-        $data['roles'] = Role::orderBy('name', 'asc')->get();
+        $data['title'] = 'User-Create';
         return view('admin.customer.create', compact('data'));
     }
 
@@ -64,57 +64,49 @@ class CustomerController extends Controller
         // }
 
         $this->validate($request, [
-            'name'           => 'required|max:100',
-            'email'          => 'required|unique:users,email',
-            'password'       => 'required|min:6|max:11',
-            'phone'          => 'required',
-            'address'        => 'nullable',
+            'name'           => 'required|string|max:80',
+            'email'          => 'required|string|email|max:128|unique:users,email',
+            'password'       => 'required|min:6',
+            'phone'          => 'required|max:20|unique:users,phone',
+            'address'        => 'nullable|max:255',
             'image'          => 'nullable',
             'status'         => 'required',
-            'ip_address'     => 'required',
-            'authenticator'  => 'required',
         ]);
 
-        $imagePath = null;
         DB::beginTransaction();
         try {
-            // if ($request->hasFile('image')) {
-            //     $image = Image::make($request->file('image'));
-
-            //     $imageName = time() . '-' . $request->file('image')->getClientOriginalName();
-            //     $destinationPath = public_path('assets/images/customer/');
-            //     $image->save($destinationPath . $imageName);
-            //     $imagePath = 'assets/images/customer/' . $imageName;
-            // }
 
             $customer = new User();
-            $customer->role_id          = 1;
-            $customer->parent_user      = 0;
-            $customer->user_id          = uniqid();
             $customer->name             = $request->name;
             $customer->email            = $request->email;
             $customer->password         = bcrypt($request->password);
             $customer->phone            = $request->phone;
-            $customer->image            = $imagePath;
-            $customer->address          = $request->address;
-            // $customer->ip_address    = $request->ip_address;
-            $customer->ip_address       = json_encode($request->ip_address);
-            $customer->status           = $request->status;
-            $customer->authenticator    = $request->authenticator;
-            $customer->save();
 
-            $customerSettings = new UserSetting();
-            $customerSettings->user_id = $customer->id;
-            $customerSettings->save();
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $base_name  = preg_replace('/\..+$/', '', $image->getClientOriginalName());
+                $base_name  = explode(' ', $base_name);
+                $base_name  = implode('-', $base_name);
+                $base_name  = Str::lower($base_name);
+                $image_name = $base_name . "-" . uniqid() . "." . $image->getClientOriginalExtension();
+                $file_path  = 'uploads/user';
+                $image->move(public_path($file_path), $image_name);
+                $customer->image  = $file_path . '/' . $image_name;
+            }
+
+            $customer->address          = $request->address;
+            $customer->status           = $request->status;
+            $customer->email_verified_at    = now();
+            $customer->save();
             
         } catch (\Exception $e) {
             DB::rollback();
             // dd($e);
-            Toastr::error(trans('Customer not Created !'), 'Error', ["positionClass" => "toast-top-center"]);
+            Toastr::error(trans('Failed to create the user. Please try again!'), 'Error', ["positionClass" => "toast-top-center"]);
             return redirect()->route('admin.customer.index');
         }
         DB::commit();
-        Toastr::success(trans('Customer Created Successfully!'), 'Success', ["positionClass" => "toast-top-center"]);
+        Toastr::success(trans('User created successfully!'), 'Success', ["positionClass" => "toast-top-center"]);
         return redirect()->route('admin.customer.index');
     }
 
@@ -124,9 +116,8 @@ class CustomerController extends Controller
         // if (is_null($this->user) || !$this->user->can('admin.customer.edit')) {
         //     abort(403, 'Sorry !! You are Unauthorized.');
         // }
-        $data['title'] = 'Edit Customer';
+        $data['title'] = 'User-Edit';
         $data['user'] = User::findOrFail($id);
-        $data['role'] = Role::orderBy('name', 'asc')->get();
         return view('admin.customer.edit', compact('data'));
     }
 
@@ -136,17 +127,16 @@ class CustomerController extends Controller
         //     abort(403, 'Sorry !! You are Unauthorized.');
         // }
         $customer = User::find($id);
+
         $this->validate($request, [
-            'name'           => 'required|max:100',
-            'email'          => 'required|unique:users,email,'. $customer->id,
-            'phone'          => 'required',
-            'address'        => 'nullable',
-            'ip_address'     => 'required',
+            'name'           => 'required|string|max:80',
+            'email'          => 'required|string|email|max:128|unique:users,email,'. $customer->id,
+            'phone'          => 'required|max:20|unique:users,phone,'. $customer->id,
+            'address'        => 'nullable|max:255',
             'image'          => 'nullable',
             'status'         => 'required',
-            'authenticator'  => 'required',
-
         ]);
+
 
         DB::beginTransaction();
         try {
@@ -154,52 +144,34 @@ class CustomerController extends Controller
             $customer->email            = $request->email;
             $customer->phone            = $request->phone;
             $customer->address          = $request->address;
-            $customer->authenticator    = $request->authenticator;
+            $customer->status           = $request->status;
 
-            if ($request->has('ip_address')) {
-                $customer->ip_address    = json_encode($request->ip_address);
-                User::where('parent_user', $customer->id)
-                    ->update(['ip_address' => json_encode($request->ip_address)]);
+            if ($request->hasFile('image')) {
+
+                if (File::exists($customer->image)) {
+                    File::delete($customer->image);
+                }
+                $image = $request->file('image');
+                $base_name  = preg_replace('/\..+$/', '', $image->getClientOriginalName());
+                $base_name  = explode(' ', $base_name);
+                $base_name  = implode('-', $base_name);
+                $base_name  = Str::lower($base_name);
+                $image_name = $base_name . "-" . uniqid() . "." . $image->getClientOriginalExtension();
+                $file_path  = 'uploads/user';
+                $image->move(public_path($file_path), $image_name);
+                $customer->image  = $file_path . '/' . $image_name;
             }
-
-            if ($request->has('status')) {
-                $customer->status = $request->status;
-            
-                User::where('parent_user', $customer->id)
-                ->update(['status' => $request->status]);
-                
-                // if ($request->status == 0) {
-                //     User::where('parent_user', $customer->id)
-                //         ->update(['status' => $request->status]);
-                // }
-            }
-            
-            if(isset($request->password) && !empty($request->password)) 
-            {
-                $customer->password      = bcrypt($request->password);
-            }
-
-
-            // if ($request->hasFile('image')) {
-            //     $image = Image::make($request->file('image'));
-            //     $imageName = time() . '-' . $request->file('image')->getClientOriginalName();
-            //     $destinationPath = public_path('assets/images/customer/');
-            //     $image->save($destinationPath . $imageName);
-            //     $customer->image = 'assets/images/customer/' . $imageName;
-
-            // }
-            User::where('parent_user', $customer->id)->update(['ip_address' => json_encode($request->ip_address)]);
             
             $customer->save();
 
         } catch (\Exception $e) {
-            DB::rollback();
             // dd($e);
-            Toastr::error(trans('Customer not Updated !'), 'Error', ["positionClass" => "toast-top-center"]);
+            DB::rollback();
+            Toastr::error(trans('Failed to update the user. Please try again!'), 'Error', ["positionClass" => "toast-top-center"]);
             return redirect()->route('admin.customer.index');
         }
         DB::commit();
-        Toastr::success(trans('Customer Updated Successfully !'), 'Success', ["positionClass" => "toast-top-center"]);
+        Toastr::success(trans('User updated successfully!'), 'Success', ["positionClass" => "toast-top-center"]);
         return redirect()->route('admin.customer.index');
     }
 
@@ -214,64 +186,56 @@ class CustomerController extends Controller
         DB::beginTransaction();
         try {
             $customer = User::findOrFail($id);
-            $staffs = User::where('parent_user', $id)->get();
-
-            foreach ($staffs as $staff) {
-                $imagePath = asset($staff->image);
-                if (File::exists($imagePath)) {
-                    File::delete($imagePath);
-                }
-                $staff->delete();
+            if (File::exists($customer->image)) {
+                File::delete($customer->image);
             }
-
-            Alarm::where('user_id', $id)->delete();
-            NotificationTemplate::where('user_id', $id)->delete();
-            DefconLevel::where('user_id', $id)->delete();
-            UserSetting::where('user_id', $id)->delete();
-
-            $customerImagePath = asset($customer->image);
-            if (File::exists($customerImagePath)) {
-                File::delete($customerImagePath);
-            }
-
             $customer->delete();
         } catch (\Exception $e) {
             DB::rollback();
-            Toastr::error(trans('Customer not Deleted !'), 'Error', ["positionClass" => "toast-top-center"]);
+            Toastr::error(trans('Failed to delete the user. Please try again!'), 'Error', ["positionClass" => "toast-top-center"]);
             return redirect()->route('admin.customer.index');
         }
         DB::commit();
-        Toastr::success(trans('Customer Deleted Successfully !'), 'Success', ["positionClass" => "toast-top-center"]);
+        Toastr::success(trans('User deleted successfully!'), 'Success', ["positionClass" => "toast-top-center"]);
         return redirect()->route('admin.customer.index');
     }
 
     public function view($id){
-        if (is_null($this->user) ||!$this->user->can('admin.customer.index')) {
-            abort(403, 'Sorry!! You are Unauthorized.');
-        }
-        $data['title'] = 'Customer View';
+        // if (is_null($this->user) ||!$this->user->can('admin.customer.index')) {
+        //     abort(403, 'Sorry!! You are Unauthorized.');
+        // }
+        $data['title'] = 'User-details';
         $data['user'] = User::find($id);
         return view('admin.customer.view', compact('data'));
     }
 
-    
-    public function staff($id)
+    public function passwordUpdate(Request $request, $id)
     {
-        // if (is_null($this->user) ||!$this->user->can('admin.staff.index')) {
-        //     abort(403, 'Sorry!! You are Unauthorized.');
-        // }
-        $data['title'] = 'Customer User';
-        return view('admin.customer.staff', compact('data'));
+        $this->validate($request, [
+            'password'          => 'required|min:6',
+        ]);
+
+        try {
+            $user  = User::find($id);
+            $user->password = bcrypt($request->password);
+            $user->update();
+
+        } catch (\Exception $e) {
+            Toastr::error(trans('An unexpected error occured while updating password'), trans('Error'), ["positionClass" => "toast-top-right"]);
+            return redirect()->back();
+        }
+        Toastr::success(trans('Password updated successfully'), trans('Success'), ["positionClass" => "toast-top-right"]);
+        return redirect()->back();
     }
 
-    public function authAs(Request $request, $id)
-    {
-        $user_details = User::where('id', $id)->where('status', 1)->first();
-        if (isset($user_details)) {
-            Auth::guard('user')->loginUsingId($user_details->id);
-            return redirect()->route('user.dashboard');
-        } else {
-            return redirect()->route('admin.customer.index')->with('info', 'Customer account not found!');
-        }
-    }
+    // public function authAs(Request $request, $id)
+    // {
+    //     $user_details = User::where('id', $id)->where('status', 1)->first();
+    //     if (isset($user_details)) {
+    //         Auth::guard('user')->loginUsingId($user_details->id);
+    //         return redirect()->route('user.dashboard');
+    //     } else {
+    //         return redirect()->route('admin.customer.index')->with('info', 'Customer account not found!');
+    //     }
+    // }
 }
